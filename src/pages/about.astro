@@ -1,0 +1,204 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/url';
+import { site } from '../data/portfolio';
+---
+
+<Base
+  active="about"
+  title="About — Andres Jimenez"
+  description="Andres Jimenez builds across the stack — native iOS audio, self-hosted infrastructure, computer vision and algorithms."
+>
+  <section class="wrap-wide about">
+    <div class="about__grid">
+      <aside class="about__aside" data-reveal>
+        <div class="about__portrait img-ph">
+          <div class="img-ph__label">[ portrait ]</div>
+        </div>
+        <a class="about__resume" href={site.resumeUrl}>
+          Download résumé <span class="about__resume-meta">↓ pdf</span>
+        </a>
+      </aside>
+
+      <div class="about__main" data-reveal data-reveal-delay="80">
+        <div class="eyebrow about__eyebrow">// about</div>
+        <h1 class="about__title">I build things end to end.</h1>
+        <div class="about__prose">
+          <p>
+            I'm a software engineer who likes owning a project from the audio
+            path to the deploy script. Lately that's meant <strong>Kord</strong>,
+            a native, bit-perfect FLAC player for iOS built in Swift — chasing
+            real lossless playback, not just the word on the box.
+          </p>
+          <p>
+            I'm just as happy in the backend and the terminal: a fully
+            documented, reproducible <em>homelab</em> running 20+ self-hosted
+            services on a single ARM board, a real-time computer-vision card
+            detector in OpenCV, a chess engine with full rule enforcement, and
+            small algorithm and tooling projects when a problem catches my eye.
+          </p>
+          <p class="about__muted">
+            {site.location ? `${site.location} · ` : ''}open to software
+            engineering roles where the hard part is real.
+          </p>
+        </div>
+
+        <div class="about__skills">
+          <div class="about__skills-label">// stack &amp; skills</div>
+          <div class="about__skills-grid">
+            <div>
+              <div class="about__skill-h">Languages</div>
+              <div class="about__skill-v">Swift · Python<br />C++ · TypeScript</div>
+            </div>
+            <div>
+              <div class="about__skill-h">Systems</div>
+              <div class="about__skill-v">Docker · Linux<br />CasaOS · self-hosting</div>
+            </div>
+            <div>
+              <div class="about__skill-h">Practice</div>
+              <div class="about__skill-v">iOS / audio · CV<br />algorithms · tooling</div>
+            </div>
+          </div>
+        </div>
+
+        <div class="about__cta">
+          <span>Want the longer version?</span>
+          <a class="about__cta-link" href={url('/contact')}>Get in touch →</a>
+        </div>
+      </div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .wrap-wide {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding-left: clamp(20px, 5vw, 72px);
+    padding-right: clamp(20px, 5vw, 72px);
+  }
+  .about {
+    padding-top: clamp(48px, 7vw, 100px);
+    padding-bottom: clamp(40px, 5vw, 72px);
+  }
+  .about__grid {
+    display: grid;
+    grid-template-columns: 0.85fr 1.15fr;
+    gap: clamp(32px, 5vw, 80px);
+    align-items: start;
+  }
+  .about__aside {
+    position: sticky;
+    top: 100px;
+  }
+  .about__portrait {
+    aspect-ratio: 4 / 5;
+    border-radius: 12px;
+    margin-bottom: 20px;
+  }
+  .about__resume {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    gap: 10px;
+    background: var(--accent);
+    color: var(--on-accent);
+    border-radius: 999px;
+    padding: 13px;
+    font-family: var(--font-sans);
+    font-size: 15px;
+    font-weight: 600;
+    text-decoration: none;
+  }
+  .about__resume-meta {
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+  .about__eyebrow {
+    letter-spacing: 0.14em;
+    margin-bottom: 22px;
+  }
+  .about__title {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(34px, 4.6vw, 60px);
+    line-height: 1.06;
+    letter-spacing: -0.02em;
+    margin: 0 0 28px;
+    color: var(--ink);
+  }
+  .about__prose {
+    font-size: clamp(17px, 1.7vw, 20px);
+    line-height: 1.65;
+    color: var(--ink);
+  }
+  .about__prose p {
+    margin: 0 0 20px;
+  }
+  .about__prose em {
+    font-family: var(--font-serif);
+    font-style: italic;
+  }
+  .about__muted {
+    color: var(--ink-2);
+  }
+
+  .about__skills {
+    margin-top: clamp(36px, 5vw, 56px);
+  }
+  .about__skills-label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin-bottom: 18px;
+  }
+  .about__skills-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+    gap: 22px;
+  }
+  .about__skill-h {
+    font-size: 14px;
+    font-weight: 700;
+    color: var(--ink);
+    margin-bottom: 10px;
+  }
+  .about__skill-v {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    line-height: 1.9;
+    color: var(--ink-2);
+  }
+
+  .about__cta {
+    margin-top: clamp(36px, 5vw, 56px);
+    padding-top: 28px;
+    border-top: 1px solid var(--line);
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 16px 26px;
+    font-size: 17px;
+    color: var(--ink);
+  }
+  .about__cta-link {
+    font-family: var(--font-sans);
+    font-size: 17px;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: underline;
+    text-underline-offset: 5px;
+  }
+
+  @media (max-width: 760px) {
+    .about__grid {
+      grid-template-columns: 1fr;
+    }
+    .about__aside {
+      position: static;
+      max-width: 360px;
+    }
+  }
+</style>

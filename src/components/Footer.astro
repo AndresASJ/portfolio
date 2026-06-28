@@ -1,0 +1,111 @@
+---
+import { socials, site } from '../data/portfolio';
+const year = new Date().getFullYear();
+---
+
+<footer class="site-footer">
+  <div class="site-footer__inner">
+    <div class="site-footer__top">
+      <div>
+        <div class="site-footer__eyebrow">// let's build something</div>
+        <a class="site-footer__email" href={`mailto:${site.email}`}>
+          <span class="site-footer__email-tilde">~/</span>{site.email}
+        </a>
+      </div>
+      <div class="site-footer__socials">
+        {
+          socials.map((s) => (
+            <a href={s.href} target="_blank" rel="noopener noreferrer">
+              {s.label} ↗
+            </a>
+          ))
+        }
+      </div>
+    </div>
+    <div class="site-footer__bottom">
+      <span>© {year} {site.name}</span>
+      <span>Built with Astro — designed to grow <span class="cursor">▮</span></span>
+    </div>
+  </div>
+</footer>
+
+<style>
+  .site-footer {
+    border-top: 1px solid var(--line);
+    background: var(--paper-2);
+    padding: clamp(50px, 7vw, 96px) clamp(20px, 5vw, 72px) 40px;
+  }
+  .site-footer__inner {
+    max-width: 1320px;
+    margin: 0 auto;
+  }
+  .site-footer__top {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: flex-end;
+    justify-content: space-between;
+    gap: 32px;
+    margin-bottom: clamp(40px, 6vw, 72px);
+  }
+  .site-footer__eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin-bottom: 18px;
+  }
+  .site-footer__email {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(30px, 6vw, 78px);
+    letter-spacing: -0.02em;
+    color: var(--ink);
+    text-decoration: none;
+    line-height: 1;
+    display: inline-flex;
+    align-items: baseline;
+    gap: 4px;
+    word-break: break-word;
+    transition: color 0.2s ease;
+  }
+  .site-footer__email:hover {
+    color: var(--accent);
+  }
+  .site-footer__email-tilde {
+    color: var(--accent);
+    font-family: var(--font-mono);
+    font-size: 0.5em;
+  }
+  .site-footer__socials {
+    display: flex;
+    gap: 26px;
+    flex-wrap: wrap;
+  }
+  .site-footer__socials a {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-2);
+    text-decoration: none;
+    letter-spacing: 0.04em;
+    transition: color 0.2s ease;
+  }
+  .site-footer__socials a:hover {
+    color: var(--accent);
+  }
+  .site-footer__bottom {
+    display: flex;
+    flex-wrap: wrap;
+    justify-content: space-between;
+    gap: 16px;
+    padding-top: 26px;
+    border-top: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+  .cursor {
+    color: var(--accent);
+  }
+</style>

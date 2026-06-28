@@ -1,0 +1,4 @@
+User-agent: *
+Allow: /
+
+Sitemap: https://asjcoding.com/sitemap-index.xml

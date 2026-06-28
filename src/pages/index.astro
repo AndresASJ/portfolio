@@ -1,0 +1,559 @@
+---
+import Base from '../layouts/Base.astro';
+import { url } from '../lib/url';
+import {
+  projects,
+  marqueeItems,
+  site,
+  indexLabel,
+} from '../data/portfolio';
+import { posts } from '../data/posts';
+
+const featured = projects.slice(0, 3);
+const selected = projects.slice(3);
+const recentPosts = posts.slice(0, 3);
+---
+
+<Base active={null}>
+  <!-- Hero -->
+  <section class="hero wrap">
+    <div class="hero__meta" data-reveal>
+      <span class="hero__avail">
+        <span class="dot"></span>{site.availability}
+      </span>
+      <span class="hero__rule"></span>
+      <span class="hero__role">// {site.role}</span>
+    </div>
+    <h1 class="hero__name" data-reveal data-reveal-delay="60">{site.name}</h1>
+    <p class="hero__tagline" data-reveal data-reveal-delay="140">{site.tagline}</p>
+    <div class="hero__cta" data-reveal data-reveal-delay="220">
+      <a class="btn-primary" href={url('/work')}>
+        View work <span class="arrow">→</span>
+      </a>
+      <a class="btn-outline" href={site.resumeUrl}>
+        Résumé <span class="meta">↓ pdf</span>
+      </a>
+      <a class="link-underline" href={url('/contact')}>Get in touch</a>
+    </div>
+  </section>
+
+  <!-- Marquee -->
+  <section class="marquee" aria-hidden="true">
+    <div class="marquee__track">
+      {
+        [0, 1].map(() => (
+          <span class="marquee__group">
+            {marqueeItems.map((m) => (
+              <span class="marquee__item">
+                <span class="marquee__star">✦</span>
+                {m}
+              </span>
+            ))}
+          </span>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Featured work -->
+  <section class="wrap featured">
+    <div class="section-head" data-reveal>
+      <h2 class="section-head__title">Featured work</h2>
+      <span class="section-head__index">/ 01 — selected</span>
+    </div>
+    <div class="featured__list">
+      {
+        featured.map((p, i) => (
+          <a
+            class:list={['feat', { 'feat--reverse': i % 2 === 1 }]}
+            href={url(`/work/${p.id}`)}
+            data-reveal
+          >
+            <div class="feat__img img-ph">
+              <div class="img-ph__label">{p.imgLabel}</div>
+              <div class="img-ph__index">{'/ ' + indexLabel(i)}</div>
+              <div
+                class:list={[
+                  'status',
+                  p.status === 'Shipped' ? 'status--shipped' : 'status--wip',
+                ]}
+              >
+                {p.status}
+              </div>
+            </div>
+            <div class="feat__body">
+              <div class="feat__cat">{p.category}</div>
+              <h3 class="feat__title">{p.title}</h3>
+              <p class="feat__summary">{p.summary}</p>
+              <div class="feat__stack">
+                {p.stack.map((t) => (
+                  <span class="tag">{t}</span>
+                ))}
+              </div>
+              <div class="feat__foot">
+                <span class="feat__impact">{p.impact}</span>
+                <span class="feat__read">read case →</span>
+              </div>
+            </div>
+          </a>
+        ))
+      }
+    </div>
+  </section>
+
+  <!-- Selected (compact list) -->
+  <section class="wrap selected">
+    <div class="section-head section-head--sm" data-reveal>
+      <h2 class="section-head__title section-head__title--sm">Selected work</h2>
+      <a class="section-head__link" href={url('/work')}>
+        view all ({projects.length}) →
+      </a>
+    </div>
+    <div data-reveal>
+      {
+        selected.map((p, i) => (
+          <a class="row" href={url(`/work/${p.id}`)}>
+            <span class="row__index">{indexLabel(i + 3)}</span>
+            <span class="row__title">{p.title}</span>
+            <span class="row__cat">{p.category}</span>
+            <span class="row__year">
+              {p.year} <span class="row__arrow">→</span>
+            </span>
+          </a>
+        ))
+      }
+      <div class="row__end"></div>
+    </div>
+  </section>
+
+  <!-- About teaser -->
+  <section class="wrap about-teaser">
+    <div class="about-teaser__grid" data-reveal>
+      <div class="about-teaser__portrait img-ph">
+        <div class="img-ph__label">[ portrait ]</div>
+      </div>
+      <div>
+        <div class="eyebrow">// about</div>
+        <p class="about-teaser__lead">
+          I work across the stack — native iOS audio, self-hosted
+          infrastructure, computer vision and algorithms. I care about
+          correctness, things that are reproducible, and software I can still
+          trust six months later.
+        </p>
+        <a class="about-teaser__more" href={url('/about')}>More about me →</a>
+      </div>
+    </div>
+  </section>
+
+  <!-- Latest writing -->
+  <section class="wrap writing-teaser">
+    <div class="section-head section-head--sm" data-reveal>
+      <h2 class="section-head__title section-head__title--sm">Latest writing</h2>
+      <a class="section-head__link" href={url('/writing')}>all posts →</a>
+    </div>
+    <div data-reveal>
+      {
+        recentPosts.map((post) => (
+          <a class="post-row" href={url(`/writing/${post.id}`)}>
+            <span class="post-row__date">{post.date}</span>
+            <span class="post-row__main">
+              <span class="post-row__title">{post.title}</span>
+              <span class="post-row__excerpt">{post.excerpt}</span>
+            </span>
+            <span class="post-row__tag">{post.tag}</span>
+          </a>
+        ))
+      }
+      <div class="row__end"></div>
+    </div>
+  </section>
+</Base>
+
+<style>
+  /* --- Hero --- */
+  .hero {
+    padding-top: clamp(56px, 9vw, 130px);
+    padding-bottom: clamp(40px, 6vw, 90px);
+  }
+  .hero__meta {
+    display: flex;
+    align-items: center;
+    gap: 14px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.14em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin-bottom: clamp(26px, 4vw, 48px);
+  }
+  .hero__avail {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .hero__rule {
+    flex: 1;
+    height: 1px;
+    background: var(--line);
+  }
+  .hero__role {
+    white-space: nowrap;
+  }
+  .hero__name {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(50px, 9.4vw, 138px);
+    line-height: 0.92;
+    letter-spacing: -0.025em;
+    margin: 0 0 clamp(24px, 3.5vw, 40px);
+    color: var(--ink);
+  }
+  .hero__tagline {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-weight: 400;
+    font-size: clamp(22px, 3.1vw, 40px);
+    line-height: 1.28;
+    letter-spacing: -0.01em;
+    max-width: 24ch;
+    margin: 0 0 clamp(36px, 5vw, 56px);
+    color: var(--ink);
+  }
+  .hero__cta {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px;
+  }
+
+  /* --- Marquee --- */
+  .marquee {
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    overflow: hidden;
+    padding: 13px 0;
+    background: var(--paper-2);
+  }
+  .marquee__track {
+    display: flex;
+    width: max-content;
+    animation: marquee 32s linear infinite;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+  }
+  .marquee__group {
+    display: flex;
+    gap: 40px;
+    padding-right: 40px;
+  }
+  .marquee__item {
+    display: flex;
+    align-items: center;
+    gap: 40px;
+  }
+  .marquee__star {
+    color: var(--accent);
+  }
+
+  /* --- Section headings --- */
+  .section-head {
+    display: flex;
+    align-items: baseline;
+    justify-content: space-between;
+    gap: 20px;
+    margin-bottom: clamp(36px, 5vw, 64px);
+  }
+  .section-head--sm {
+    margin-bottom: 12px;
+  }
+  .section-head__title {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(30px, 4.4vw, 56px);
+    letter-spacing: -0.02em;
+    margin: 0;
+    color: var(--ink);
+  }
+  .section-head__title--sm {
+    font-size: clamp(26px, 3.4vw, 42px);
+  }
+  .section-head__index {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.12em;
+    color: var(--ink-2);
+    text-transform: uppercase;
+    white-space: nowrap;
+  }
+  .section-head__link {
+    background: none;
+    border: none;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    text-decoration: none;
+    white-space: nowrap;
+  }
+
+  .featured {
+    padding-top: clamp(56px, 8vw, 110px);
+    padding-bottom: clamp(30px, 4vw, 60px);
+  }
+  .featured__list {
+    display: flex;
+    flex-direction: column;
+    gap: clamp(40px, 6vw, 88px);
+  }
+
+  /* --- Featured row --- */
+  .feat {
+    display: flex;
+    flex-direction: row;
+    gap: clamp(24px, 4vw, 64px);
+    align-items: center;
+    cursor: pointer;
+    text-decoration: none;
+    color: inherit;
+  }
+  .feat--reverse {
+    flex-direction: row-reverse;
+  }
+  .feat__img {
+    flex: 0 0 clamp(280px, 42%, 560px);
+    aspect-ratio: 4 / 3;
+  }
+  .feat__body {
+    flex: 1;
+    min-width: 0;
+  }
+  .feat__cat {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 14px;
+  }
+  .feat__title {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(28px, 3.6vw, 46px);
+    line-height: 1.02;
+    letter-spacing: -0.02em;
+    margin: 0 0 14px;
+    color: var(--ink);
+  }
+  .feat__summary {
+    font-size: clamp(16px, 1.5vw, 19px);
+    line-height: 1.5;
+    color: var(--ink-2);
+    margin: 0 0 22px;
+    max-width: 44ch;
+  }
+  .feat__stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-bottom: 22px;
+  }
+  .feat__foot {
+    display: flex;
+    align-items: center;
+    gap: 16px;
+    padding-top: 20px;
+    border-top: 1px solid var(--line);
+  }
+  .feat__impact {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(17px, 1.7vw, 22px);
+    color: var(--ink);
+    flex: 1;
+  }
+  .feat__read {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 600;
+    color: var(--accent);
+    white-space: nowrap;
+  }
+
+  @media (max-width: 720px) {
+    .feat,
+    .feat--reverse {
+      flex-direction: column;
+      align-items: stretch;
+    }
+    .feat__img {
+      flex-basis: auto;
+      width: 100%;
+    }
+  }
+
+  /* --- Selected rows --- */
+  .selected {
+    padding-top: clamp(40px, 6vw, 80px);
+    padding-bottom: clamp(40px, 6vw, 80px);
+  }
+  .row {
+    display: grid;
+    grid-template-columns: 52px 1fr auto auto;
+    align-items: center;
+    gap: clamp(12px, 3vw, 40px);
+    width: 100%;
+    text-align: left;
+    text-decoration: none;
+    border-top: 1px solid var(--line);
+    padding: clamp(18px, 2.4vw, 28px) 12px;
+    cursor: pointer;
+    color: var(--ink);
+    transition: background 0.2s ease, padding 0.2s ease;
+  }
+  .row:hover {
+    background: var(--accent-soft);
+    padding-left: 22px;
+  }
+  .row__index {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink-2);
+  }
+  .row__title {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(20px, 2.4vw, 30px);
+    letter-spacing: -0.01em;
+  }
+  .row__cat {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-2);
+    text-transform: uppercase;
+    letter-spacing: 0.06em;
+    display: none;
+  }
+  .row__year {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink-2);
+  }
+  .row__arrow {
+    color: var(--accent);
+    margin-left: 12px;
+  }
+  .row__end {
+    border-top: 1px solid var(--line);
+  }
+  @media (min-width: 720px) {
+    .row__cat {
+      display: inline;
+    }
+  }
+
+  /* --- About teaser --- */
+  .about-teaser {
+    padding-top: clamp(50px, 7vw, 100px);
+    padding-bottom: clamp(50px, 7vw, 100px);
+  }
+  .about-teaser__grid {
+    display: grid;
+    grid-template-columns: 0.9fr 1.1fr;
+    gap: clamp(28px, 5vw, 72px);
+    align-items: center;
+  }
+  .about-teaser__portrait {
+    aspect-ratio: 4 / 5;
+    border-radius: 10px;
+  }
+  .about-teaser__lead {
+    font-family: var(--font-serif);
+    font-weight: 400;
+    font-size: clamp(22px, 2.6vw, 33px);
+    line-height: 1.34;
+    letter-spacing: -0.01em;
+    margin: 22px 0 26px;
+    color: var(--ink);
+  }
+  .about-teaser__more {
+    font-family: var(--font-sans);
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+    text-decoration: underline;
+    text-underline-offset: 5px;
+    text-decoration-color: var(--accent);
+    transition: color 0.2s ease;
+  }
+  .about-teaser__more:hover {
+    color: var(--accent);
+  }
+  @media (max-width: 720px) {
+    .about-teaser__grid {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  /* --- Writing teaser --- */
+  .writing-teaser {
+    padding-top: clamp(40px, 6vw, 80px);
+    padding-bottom: clamp(60px, 8vw, 110px);
+  }
+  .post-row {
+    display: grid;
+    grid-template-columns: 120px 1fr auto;
+    align-items: baseline;
+    gap: clamp(12px, 3vw, 36px);
+    width: 100%;
+    text-align: left;
+    text-decoration: none;
+    border-top: 1px solid var(--line);
+    padding: clamp(18px, 2.2vw, 26px) 12px;
+    cursor: pointer;
+    color: var(--ink);
+    transition: background 0.2s ease, padding 0.2s ease;
+  }
+  .post-row:hover {
+    background: var(--accent-soft);
+    padding-left: 22px;
+  }
+  .post-row__date {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+  .post-row__title {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(19px, 2.1vw, 26px);
+    letter-spacing: -0.01em;
+    display: block;
+  }
+  .post-row__excerpt {
+    font-size: 15px;
+    color: var(--ink-2);
+    display: block;
+    margin-top: 4px;
+  }
+  .post-row__tag {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--accent);
+    border: 1px solid var(--line);
+    border-radius: 6px;
+    padding: 4px 9px;
+    white-space: nowrap;
+  }
+  @media (max-width: 600px) {
+    .post-row {
+      grid-template-columns: 1fr auto;
+    }
+    .post-row__date {
+      display: none;
+    }
+  }
+</style>

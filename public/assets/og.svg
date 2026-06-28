@@ -1,0 +1,19 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 1200 630" width="1200" height="630">
+  <rect width="1200" height="630" fill="#faf8f3"/>
+  <rect x="0" y="0" width="1200" height="630" fill="url(#hatch)"/>
+  <defs>
+    <pattern id="hatch" width="44" height="44" patternTransform="rotate(135)" patternUnits="userSpaceOnUse">
+      <rect width="44" height="44" fill="#faf8f3"/>
+      <rect width="22" height="44" fill="#f4efe6"/>
+    </pattern>
+  </defs>
+  <rect x="64" y="64" width="1072" height="502" rx="20" fill="#faf8f3" stroke="rgba(26,26,26,0.13)"/>
+  <text x="112" y="180" font-family="'JetBrains Mono', monospace" font-size="22" letter-spacing="3" fill="#6b6358">
+    <tspan fill="#1f4ed8">~/</tspan>andres · software engineer
+  </text>
+  <text x="108" y="320" font-family="Georgia, 'Newsreader', serif" font-size="104" font-weight="500" fill="#1a1a1a" letter-spacing="-3">Andres Jimenez</text>
+  <text x="112" y="400" font-family="Georgia, 'Newsreader', serif" font-style="italic" font-size="38" fill="#6b6358">I build things end to end — iOS audio, self-hosting,</text>
+  <text x="112" y="448" font-family="Georgia, 'Newsreader', serif" font-style="italic" font-size="38" fill="#6b6358">computer vision and algorithms.</text>
+  <circle cx="122" cy="506" r="7" fill="#2ea05a"/>
+  <text x="142" y="513" font-family="'JetBrains Mono', monospace" font-size="20" fill="#1a1a1a">Open to software engineering roles · 2026</text>
+</svg>

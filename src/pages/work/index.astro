@@ -1,0 +1,444 @@
+---
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
+import {
+  projects,
+  projectCategories,
+  stackOptions,
+  indexLabel,
+} from '../../data/portfolio';
+
+const cats = projectCategories();
+---
+
+<Base
+  active="work"
+  title="Work — Andres Jimenez"
+  description="A growing archive of shipped products and side projects by Andres Jimenez — iOS audio, self-hosting, computer vision and algorithms."
+>
+  <!-- Intro -->
+  <section class="wrap work-intro">
+    <div class="eyebrow">// all work</div>
+    <h1 class="work-intro__title">Work</h1>
+    <p class="work-intro__lead">
+      A growing archive of shipped products and side projects. Filter by
+      discipline or stack, or search across everything.
+    </p>
+  </section>
+
+  <!-- Filter bar -->
+  <section class="filterbar">
+    <div class="filterbar__row wrap">
+      <div class="chips" data-cat-group>
+        {
+          cats.map((c) => (
+            <button
+              class:list={['chip', { 'chip--active': c === 'All' }]}
+              data-cat={c}
+              type="button"
+            >
+              {c === 'All' ? 'All work' : c}
+            </button>
+          ))
+        }
+      </div>
+      <span class="filterbar__divider"></span>
+      <div class="search">
+        <span class="search__slash">/</span>
+        <input
+          id="work-search"
+          type="search"
+          placeholder="search titles, stacks, tags…"
+          autocomplete="off"
+          aria-label="Search projects"
+        />
+        <span class="search__count" data-result-count>{projects.length} result(s)</span>
+      </div>
+    </div>
+    <div class="filterbar__row filterbar__row--stack wrap">
+      <span class="filterbar__label">stack:</span>
+      <div class="chips" data-stack-group>
+        {
+          stackOptions.map((t) => (
+            <button
+              class:list={['chip', { 'chip--active': t === 'All' }]}
+              data-stack={t}
+              type="button"
+            >
+              {t}
+            </button>
+          ))
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Grid -->
+  <section class="wrap work-grid-wrap">
+    <div class="work-grid" data-grid>
+      {
+        projects.map((p, i) => (
+          <a
+            class="card"
+            href={url(`/work/${p.id}`)}
+            data-card
+            data-category={p.category}
+            data-stack={p.stack.join('|')}
+            data-search={`${p.title} ${p.summary} ${p.stack.join(' ')} ${p.category} ${p.role}`.toLowerCase()}
+          >
+            <div class="card__img img-ph">
+              <div class="img-ph__label">{p.imgLabel}</div>
+              <div class="img-ph__index">{'/ ' + indexLabel(i)}</div>
+              <div
+                class:list={[
+                  'status',
+                  p.status === 'Shipped' ? 'status--shipped' : 'status--wip',
+                ]}
+              >
+                {p.status}
+              </div>
+            </div>
+            <div class="card__cat">{p.category}</div>
+            <h3 class="card__title">{p.title}</h3>
+            <p class="card__summary">{p.summary}</p>
+            <div class="card__stack">
+              {p.stack.map((t) => (
+                <span class="tag">{t}</span>
+              ))}
+            </div>
+          </a>
+        ))
+      }
+    </div>
+
+    <div class="empty" data-empty hidden>
+      <div class="empty__cmd">
+        $ grep "<span data-empty-query></span>" ./projects → 0 matches
+      </div>
+      <p class="empty__line">Nothing here — yet.</p>
+      <button class="empty__reset" type="button" data-reset>clear filters</button>
+    </div>
+
+    <div class="reset-wrap" data-reset-wrap hidden>
+      <button class="reset-pill" type="button" data-reset>reset filters</button>
+    </div>
+  </section>
+</Base>
+
+<script>
+  const grid = document.querySelector('[data-grid]');
+  const cards = Array.from(document.querySelectorAll('[data-card]')) as HTMLElement[];
+  const catBtns = Array.from(
+    document.querySelectorAll('[data-cat-group] .chip')
+  ) as HTMLElement[];
+  const stackBtns = Array.from(
+    document.querySelectorAll('[data-stack-group] .chip')
+  ) as HTMLElement[];
+  const search = document.getElementById('work-search') as HTMLInputElement | null;
+  const countEl = document.querySelector('[data-result-count]');
+  const empty = document.querySelector('[data-empty]') as HTMLElement | null;
+  const emptyQuery = document.querySelector('[data-empty-query]');
+  const resetWrap = document.querySelector('[data-reset-wrap]') as HTMLElement | null;
+
+  const state = { category: 'All', stack: 'All', query: '' };
+
+  function setActive(btns: HTMLElement[], attr: string, value: string) {
+    btns.forEach((b) =>
+      b.classList.toggle('chip--active', b.getAttribute(attr) === value)
+    );
+  }
+
+  function apply() {
+    const q = state.query.trim().toLowerCase();
+    let visible = 0;
+    cards.forEach((card) => {
+      const cat = card.getAttribute('data-category') || '';
+      const stacks = (card.getAttribute('data-stack') || '').split('|');
+      const hay = card.getAttribute('data-search') || '';
+      let show = true;
+      if (state.category !== 'All' && cat !== state.category) show = false;
+      if (state.stack !== 'All' && !stacks.includes(state.stack)) show = false;
+      if (q && !hay.includes(q)) show = false;
+      card.hidden = !show;
+      if (show) visible++;
+    });
+
+    if (countEl) countEl.textContent = `${visible} result(s)`;
+    const filtersActive =
+      state.category !== 'All' || state.stack !== 'All' || q.length > 0;
+
+    if (empty) empty.hidden = visible !== 0;
+    if (grid) (grid as HTMLElement).hidden = visible === 0;
+    if (emptyQuery) emptyQuery.textContent = state.query;
+    if (resetWrap) resetWrap.hidden = !(filtersActive && visible !== 0);
+  }
+
+  catBtns.forEach((b) =>
+    b.addEventListener('click', () => {
+      state.category = b.getAttribute('data-cat') || 'All';
+      setActive(catBtns, 'data-cat', state.category);
+      apply();
+    })
+  );
+  stackBtns.forEach((b) =>
+    b.addEventListener('click', () => {
+      state.stack = b.getAttribute('data-stack') || 'All';
+      setActive(stackBtns, 'data-stack', state.stack);
+      apply();
+    })
+  );
+  search?.addEventListener('input', () => {
+    state.query = search.value;
+    apply();
+  });
+
+  function reset() {
+    state.category = 'All';
+    state.stack = 'All';
+    state.query = '';
+    if (search) search.value = '';
+    setActive(catBtns, 'data-cat', 'All');
+    setActive(stackBtns, 'data-stack', 'All');
+    apply();
+  }
+  document
+    .querySelectorAll('[data-reset]')
+    .forEach((b) => b.addEventListener('click', reset));
+
+  apply();
+</script>
+
+<style>
+  .work-intro {
+    padding-top: clamp(48px, 7vw, 96px);
+    padding-bottom: clamp(28px, 4vw, 52px);
+  }
+  .work-intro .eyebrow {
+    margin-bottom: 20px;
+  }
+  .work-intro__title {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(44px, 7vw, 96px);
+    line-height: 0.95;
+    letter-spacing: -0.025em;
+    margin: 0 0 20px;
+    color: var(--ink);
+  }
+  .work-intro__lead {
+    font-size: clamp(16px, 1.6vw, 20px);
+    line-height: 1.5;
+    color: var(--ink-2);
+    max-width: 52ch;
+    margin: 0;
+  }
+
+  /* --- Filter bar --- */
+  .filterbar {
+    position: sticky;
+    top: 71px;
+    z-index: 30;
+    background: color-mix(in srgb, var(--paper) 90%, transparent);
+    backdrop-filter: blur(12px);
+    -webkit-backdrop-filter: blur(12px);
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+    padding: 16px 0;
+  }
+  .filterbar__row {
+    display: flex;
+    flex-wrap: wrap;
+    align-items: center;
+    gap: 14px 20px;
+  }
+  .filterbar__row--stack {
+    margin-top: 8px;
+    gap: 8px;
+  }
+  .filterbar__divider {
+    width: 1px;
+    height: 24px;
+    background: var(--line);
+    display: inline-block;
+  }
+  .filterbar__label {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin-right: 4px;
+  }
+
+  .chips {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+  }
+  .chip {
+    background: transparent;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 500;
+    letter-spacing: 0.02em;
+    padding: 8px 14px;
+    border-radius: 999px;
+    border: 1px solid var(--line);
+    color: var(--ink-2);
+    transition: all 0.2s ease;
+    white-space: nowrap;
+  }
+  .chip:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+  .chip--active {
+    background: var(--accent);
+    color: var(--on-accent);
+    border-color: var(--accent);
+  }
+  .chip--active:hover {
+    color: var(--on-accent);
+  }
+
+  .search {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    flex: 1;
+    min-width: 220px;
+  }
+  .search__slash {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink-2);
+  }
+  .search input {
+    flex: 1;
+    background: transparent;
+    border: none;
+    border-bottom: 1px solid var(--line);
+    padding: 8px 2px;
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--ink);
+  }
+  .search input:focus {
+    border-color: var(--accent) !important;
+  }
+  .search__count {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-2);
+    white-space: nowrap;
+  }
+
+  /* --- Grid --- */
+  .work-grid-wrap {
+    padding-top: clamp(32px, 4vw, 56px);
+    padding-bottom: clamp(60px, 8vw, 110px);
+  }
+  .work-grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(min(100%, 380px), 1fr));
+    gap: clamp(28px, 3.5vw, 52px);
+  }
+  .card {
+    text-decoration: none;
+    color: inherit;
+    cursor: pointer;
+  }
+  .card__img {
+    position: relative;
+    aspect-ratio: 16 / 10;
+    border-radius: 10px;
+    margin-bottom: 18px;
+  }
+  .card__cat {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .card__title {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(24px, 2.6vw, 32px);
+    line-height: 1.04;
+    letter-spacing: -0.02em;
+    margin: 0 0 10px;
+    color: var(--ink);
+  }
+  .card__summary {
+    font-size: 15.5px;
+    line-height: 1.5;
+    color: var(--ink-2);
+    margin: 0 0 16px;
+  }
+  .card__stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 7px;
+  }
+  .card__stack .tag {
+    font-size: 11px;
+    padding: 4px 9px;
+    border-radius: 5px;
+  }
+
+  /* --- Empty / reset --- */
+  .empty {
+    border: 1px dashed var(--line);
+    border-radius: 14px;
+    padding: clamp(48px, 8vw, 90px) 24px;
+    text-align: center;
+  }
+  .empty__cmd {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--ink-2);
+    margin-bottom: 16px;
+    word-break: break-word;
+  }
+  .empty__line {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(22px, 3vw, 32px);
+    color: var(--ink);
+    margin: 0 0 24px;
+  }
+  .empty__reset {
+    background: var(--accent);
+    color: var(--on-accent);
+    border: none;
+    border-radius: 999px;
+    padding: 11px 22px;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+  }
+  .reset-wrap {
+    display: flex;
+    justify-content: center;
+    padding-top: 32px;
+  }
+  .reset-pill {
+    background: none;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    padding: 10px 20px;
+    cursor: pointer;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-2);
+    transition: all 0.2s ease;
+  }
+  .reset-pill:hover {
+    color: var(--accent);
+    border-color: var(--accent);
+  }
+</style>

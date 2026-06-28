@@ -1,0 +1,153 @@
+---
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
+import { posts } from '../../data/posts';
+---
+
+<Base
+  active="writing"
+  title="Writing — Andres Jimenez"
+  description="Notes on engineering, audio, self-hosting and the craft of building software that lasts."
+>
+  <section class="wrap-narrow writing-intro">
+    <div class="eyebrow">// writing</div>
+    <h1 class="writing-intro__title">Writing</h1>
+    <p class="writing-intro__lead">
+      Notes on engineering, audio, self-hosting and the craft of building
+      software that lasts.
+    </p>
+  </section>
+
+  <section class="wrap-narrow writing-list">
+    {
+      posts.map((post) => (
+        <a class="entry" href={url(`/writing/${post.id}`)} data-reveal>
+          <span class="entry__date">{post.date}</span>
+          <span class="entry__main">
+            <span class="entry__meta">
+              <span class="entry__tag">{post.tag}</span>
+              <span class="entry__read">{post.read}</span>
+            </span>
+            <span class="entry__title">{post.title}</span>
+            <span class="entry__excerpt">{post.excerpt}</span>
+          </span>
+          <span class="entry__arrow">→</span>
+        </a>
+      ))
+    }
+    <div class="entry__end"></div>
+  </section>
+</Base>
+
+<style>
+  .wrap-narrow {
+    max-width: 1100px;
+    margin: 0 auto;
+    padding-left: clamp(20px, 5vw, 72px);
+    padding-right: clamp(20px, 5vw, 72px);
+  }
+  .writing-intro {
+    padding-top: clamp(48px, 7vw, 100px);
+    padding-bottom: clamp(28px, 4vw, 48px);
+  }
+  .writing-intro .eyebrow {
+    margin-bottom: 20px;
+  }
+  .writing-intro__title {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(44px, 7vw, 96px);
+    line-height: 0.95;
+    letter-spacing: -0.025em;
+    margin: 0 0 20px;
+    color: var(--ink);
+  }
+  .writing-intro__lead {
+    font-size: clamp(16px, 1.6vw, 20px);
+    line-height: 1.5;
+    color: var(--ink-2);
+    max-width: 50ch;
+    margin: 0;
+  }
+
+  .writing-list {
+    padding-bottom: clamp(60px, 8vw, 110px);
+  }
+  .entry {
+    display: grid;
+    grid-template-columns: 150px 1fr 90px;
+    align-items: baseline;
+    gap: clamp(12px, 3vw, 40px);
+    width: 100%;
+    text-align: left;
+    text-decoration: none;
+    border-top: 1px solid var(--line);
+    padding: clamp(26px, 3vw, 40px) 12px;
+    cursor: pointer;
+    color: var(--ink);
+    transition: background 0.2s ease, padding 0.2s ease;
+  }
+  .entry:hover {
+    background: var(--accent-soft);
+    padding-left: 24px;
+  }
+  .entry__date {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    color: var(--ink-2);
+  }
+  .entry__meta {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin-bottom: 8px;
+  }
+  .entry__tag {
+    font-family: var(--font-mono);
+    font-size: 10px;
+    letter-spacing: 0.06em;
+    text-transform: uppercase;
+    color: var(--accent);
+    border: 1px solid var(--line);
+    border-radius: 5px;
+    padding: 3px 8px;
+  }
+  .entry__read {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    color: var(--ink-2);
+  }
+  .entry__title {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(24px, 3vw, 38px);
+    line-height: 1.08;
+    letter-spacing: -0.02em;
+    display: block;
+    margin-bottom: 8px;
+  }
+  .entry__excerpt {
+    font-size: 16px;
+    line-height: 1.5;
+    color: var(--ink-2);
+    display: block;
+    max-width: 56ch;
+  }
+  .entry__arrow {
+    font-family: var(--font-mono);
+    font-size: 14px;
+    color: var(--accent);
+    text-align: right;
+  }
+  .entry__end {
+    border-top: 1px solid var(--line);
+  }
+  @media (max-width: 640px) {
+    .entry {
+      grid-template-columns: 1fr 40px;
+    }
+    .entry__date {
+      display: none;
+    }
+  }
+</style>

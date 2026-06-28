@@ -1,0 +1,485 @@
+---
+import Base from '../../layouts/Base.astro';
+import { url } from '../../lib/url';
+import { projects, indexLabel, statusDotColor } from '../../data/portfolio';
+
+export function getStaticPaths() {
+  return projects.map((p) => ({ params: { id: p.id } }));
+}
+
+const { id } = Astro.params;
+const idx = projects.findIndex((p) => p.id === id);
+const p = projects[idx];
+const b = p.body;
+const prev = projects[(idx - 1 + projects.length) % projects.length];
+const next = projects[(idx + 1) % projects.length];
+
+const sections = [
+  { n: '01', label: 'Problem', text: b.problem },
+  { n: '02', label: 'Approach', text: b.approach },
+];
+---
+
+<Base
+  active="work"
+  title={`${p.title} — Andres Jimenez`}
+  description={p.summary}
+>
+  <!-- Header -->
+  <section class="wrap case-head">
+    <div class="case-head__bar">
+      <a class="back" href={url('/work')}>← all work</a>
+    </div>
+    <div class="case-head__index">/ {indexLabel(idx)} — {p.category}</div>
+    <h1 class="case-head__title">{p.title}</h1>
+    <p class="case-head__summary">{p.summary}</p>
+    <div class="case-meta">
+      <div class="case-meta__item">
+        <div class="case-meta__k">Role</div>
+        <div class="case-meta__v">{p.role}</div>
+      </div>
+      <div class="case-meta__item">
+        <div class="case-meta__k">Timeframe</div>
+        <div class="case-meta__v">{p.timeframe}</div>
+      </div>
+      <div class="case-meta__item">
+        <div class="case-meta__k">Status</div>
+        <div class="case-meta__v case-meta__v--status">
+          <span
+            class="case-meta__dot"
+            style={`background:${statusDotColor(p.status)}`}></span>
+          {p.status}
+        </div>
+      </div>
+      <div class="case-meta__links">
+        {
+          p.liveUrl && (
+            <a class="case-link case-link--solid" href={p.liveUrl} target="_blank" rel="noopener noreferrer">
+              live ↗
+            </a>
+          )
+        }
+        {
+          p.repoUrl && (
+            <a class="case-link" href={p.repoUrl} target="_blank" rel="noopener noreferrer">
+              github ↗
+            </a>
+          )
+        }
+      </div>
+    </div>
+  </section>
+
+  <!-- Hero image -->
+  <section class="wrap-wide case-hero">
+    <div class="case-hero__img img-ph" data-reveal>
+      <div class="img-ph__label">[ {p.imgLabel} ]</div>
+    </div>
+    <div class="case-hero__stack">
+      {p.stack.map((t) => <span class="tag">{t}</span>)}
+    </div>
+  </section>
+
+  <!-- Body sections -->
+  <section class="wrap-mid case-body">
+    {
+      sections.map(
+        (s) =>
+          s.text && (
+            <div class="case-row" data-reveal>
+              <div class="case-row__label">{s.n} / {s.label}</div>
+              <div>
+                <p class="case-row__text">{s.text}</p>
+              </div>
+            </div>
+          )
+      )
+    }
+
+    {
+      b.built.length > 0 && (
+        <div class="case-row" data-reveal>
+          <div class="case-row__label">03 / What I built</div>
+          <div class="built">
+            {b.built.map((item) => (
+              <div class="built__item">
+                <span class="built__marker">▸</span>
+                <div>
+                  <h4 class="built__h">{item.h}</h4>
+                  <p class="built__d">{item.d}</p>
+                </div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+    }
+
+    {
+      b.outcome.length > 0 && (
+        <div class="case-row" data-reveal>
+          <div class="case-row__label">04 / Outcome</div>
+          <div class="outcome">
+            {b.outcome.map((o) => (
+              <div>
+                <div class="outcome__metric">{o.metric}</div>
+                <div class="outcome__label">{o.label}</div>
+              </div>
+            ))}
+          </div>
+        </div>
+      )
+    }
+
+    {
+      b.learnings && (
+        <div class="case-row case-row--last" data-reveal>
+          <div class="case-row__label">05 / Learnings</div>
+          <div>
+            <p class="case-row__quote">{b.learnings}</p>
+          </div>
+        </div>
+      )
+    }
+  </section>
+
+  <!-- Gallery -->
+  {
+    b.gallery.length > 0 && (
+      <section class="wrap-wide case-gallery">
+        <div class="case-gallery__eyebrow" data-reveal>// gallery</div>
+        <div class="case-gallery__grid" data-reveal>
+          {b.gallery.map((g) => (
+            <div class="case-gallery__cell img-ph">
+              <div class="img-ph__label">{g}</div>
+            </div>
+          ))}
+        </div>
+      </section>
+    )
+  }
+
+  <!-- Prev / next -->
+  <section class="wrap-wide case-nav">
+    <div class="case-nav__grid">
+      <a class="case-nav__btn" href={url(`/work/${prev.id}`)}>
+        <div class="case-nav__k">← previous</div>
+        <div class="case-nav__title">{prev.title}</div>
+      </a>
+      <a class="case-nav__btn case-nav__btn--right" href={url(`/work/${next.id}`)}>
+        <div class="case-nav__k">next →</div>
+        <div class="case-nav__title">{next.title}</div>
+      </a>
+    </div>
+  </section>
+</Base>
+
+<style>
+  .wrap-wide {
+    max-width: 1180px;
+    margin: 0 auto;
+    padding-left: clamp(20px, 5vw, 72px);
+    padding-right: clamp(20px, 5vw, 72px);
+  }
+  .wrap-mid {
+    max-width: 980px;
+    margin: 0 auto;
+    padding-left: clamp(20px, 5vw, 72px);
+    padding-right: clamp(20px, 5vw, 72px);
+  }
+
+  /* --- Header --- */
+  .case-head {
+    max-width: 980px;
+    padding-top: clamp(32px, 5vw, 64px);
+    padding-bottom: clamp(20px, 3vw, 36px);
+  }
+  .case-head__bar {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 16px;
+    margin-bottom: clamp(32px, 5vw, 56px);
+  }
+  .back {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    font-weight: 500;
+    color: var(--ink-2);
+    text-decoration: none;
+    transition: color 0.2s ease;
+  }
+  .back:hover {
+    color: var(--accent);
+  }
+  .case-head__index {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    color: var(--accent);
+    margin-bottom: 16px;
+  }
+  .case-head__title {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(40px, 6.4vw, 88px);
+    line-height: 0.96;
+    letter-spacing: -0.025em;
+    margin: 0 0 22px;
+    color: var(--ink);
+  }
+  .case-head__summary {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(20px, 2.6vw, 30px);
+    line-height: 1.32;
+    color: var(--ink);
+    max-width: 34ch;
+    margin: 0 0 36px;
+  }
+
+  .case-meta {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 28px 44px;
+    padding: 26px 0;
+    border-top: 1px solid var(--line);
+    border-bottom: 1px solid var(--line);
+  }
+  .case-meta__k {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin-bottom: 7px;
+  }
+  .case-meta__v {
+    font-size: 16px;
+    font-weight: 600;
+    color: var(--ink);
+  }
+  .case-meta__v--status {
+    display: flex;
+    align-items: center;
+    gap: 8px;
+  }
+  .case-meta__dot {
+    width: 8px;
+    height: 8px;
+    border-radius: 50%;
+    display: inline-block;
+  }
+  .case-meta__links {
+    margin-left: auto;
+    display: flex;
+    align-items: center;
+    gap: 12px;
+  }
+  .case-link {
+    display: inline-flex;
+    align-items: center;
+    gap: 7px;
+    border: 1px solid var(--line);
+    color: var(--ink);
+    border-radius: 999px;
+    padding: 10px 18px;
+    font-family: var(--font-mono);
+    font-size: 12px;
+    font-weight: 600;
+    text-decoration: none;
+    transition: border-color 0.2s ease;
+  }
+  .case-link:hover {
+    border-color: var(--ink);
+  }
+  .case-link--solid {
+    background: var(--ink);
+    color: var(--paper);
+    border-color: var(--ink);
+  }
+
+  /* --- Hero --- */
+  .case-hero {
+    padding-bottom: clamp(24px, 4vw, 56px);
+  }
+  .case-hero__img {
+    aspect-ratio: 16 / 8;
+    border-radius: 14px;
+    background-image: repeating-linear-gradient(
+      135deg,
+      var(--paper-2),
+      var(--paper-2) 13px,
+      transparent 13px,
+      transparent 26px
+    );
+  }
+  .case-hero__stack {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 18px;
+  }
+
+  /* --- Body --- */
+  .case-body {
+    padding-top: clamp(24px, 4vw, 48px);
+    padding-bottom: clamp(24px, 4vw, 48px);
+  }
+  .case-row {
+    display: grid;
+    grid-template-columns: 160px 1fr;
+    gap: clamp(8px, 3vw, 40px);
+    padding: clamp(28px, 4vw, 44px) 0;
+    border-top: 1px solid var(--line);
+  }
+  .case-row--last {
+    border-bottom: 1px solid var(--line);
+  }
+  .case-row__label {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--accent);
+  }
+  .case-row__text {
+    font-size: clamp(17px, 1.8vw, 21px);
+    line-height: 1.6;
+    color: var(--ink);
+    margin: 0;
+  }
+  .case-row__quote {
+    font-family: var(--font-serif);
+    font-style: italic;
+    font-size: clamp(19px, 2.1vw, 26px);
+    line-height: 1.45;
+    color: var(--ink);
+    margin: 0;
+  }
+
+  .built {
+    display: flex;
+    flex-direction: column;
+    gap: 22px;
+  }
+  .built__item {
+    display: flex;
+    gap: 16px;
+  }
+  .built__marker {
+    font-family: var(--font-mono);
+    font-size: 13px;
+    color: var(--accent);
+    padding-top: 3px;
+  }
+  .built__h {
+    font-family: var(--font-sans);
+    font-size: 18px;
+    font-weight: 700;
+    margin: 0 0 5px;
+    color: var(--ink);
+  }
+  .built__d {
+    font-size: 16px;
+    line-height: 1.55;
+    color: var(--ink-2);
+    margin: 0;
+  }
+
+  .outcome {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(140px, 1fr));
+    gap: 24px;
+  }
+  .outcome__metric {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(36px, 4.4vw, 56px);
+    line-height: 1;
+    letter-spacing: -0.02em;
+    color: var(--accent);
+    margin-bottom: 8px;
+  }
+  .outcome__label {
+    font-size: 14.5px;
+    line-height: 1.4;
+    color: var(--ink-2);
+  }
+
+  @media (max-width: 640px) {
+    .case-row {
+      grid-template-columns: 1fr;
+      gap: 14px;
+    }
+    .case-meta__links {
+      margin-left: 0;
+      width: 100%;
+    }
+  }
+
+  /* --- Gallery --- */
+  .case-gallery {
+    padding-top: clamp(20px, 3vw, 40px);
+    padding-bottom: clamp(40px, 5vw, 72px);
+  }
+  .case-gallery__eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin-bottom: 20px;
+  }
+  .case-gallery__grid {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
+    gap: 18px;
+  }
+  .case-gallery__cell {
+    aspect-ratio: 4 / 3;
+    border-radius: 10px;
+  }
+
+  /* --- Prev/next --- */
+  .case-nav {
+    padding-top: clamp(20px, 3vw, 40px);
+    padding-bottom: clamp(60px, 8vw, 100px);
+  }
+  .case-nav__grid {
+    display: grid;
+    grid-template-columns: 1fr 1fr;
+    gap: 1px;
+    background: var(--line);
+    border: 1px solid var(--line);
+    border-radius: 12px;
+    overflow: hidden;
+  }
+  .case-nav__btn {
+    display: block;
+    text-decoration: none;
+    background: var(--paper);
+    padding: clamp(20px, 3vw, 34px);
+    transition: background 0.2s ease;
+  }
+  .case-nav__btn:hover {
+    background: var(--accent-soft);
+  }
+  .case-nav__btn--right {
+    text-align: right;
+  }
+  .case-nav__k {
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.08em;
+    text-transform: uppercase;
+    color: var(--ink-2);
+    margin-bottom: 10px;
+  }
+  .case-nav__title {
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(20px, 2.4vw, 28px);
+    color: var(--ink);
+  }
+</style>
