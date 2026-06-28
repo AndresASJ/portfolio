@@ -68,43 +68,47 @@ export const projects: Project[] = [
     title: 'Kord',
     year: '2026',
     summary:
-      'A native, bit-perfect FLAC music player for iOS — lossless local playback with zero resampling, built from the audio engine up.',
+      'A native, bit-perfect FLAC music player for iPhone & Mac — your local library decoded bit-for-bit and sent to your DAC exactly as it was mastered.',
     role: 'Solo Developer',
     timeframe: '2026 — present',
     status: 'WIP',
-    category: 'Mobile / iOS',
-    stack: ['Swift', 'SwiftUI', 'AVFoundation', 'Core Audio'],
-    impact: 'Bit-perfect lossless playback, iPhone-first, in private beta.',
+    category: 'Audio / Apple',
+    stack: ['Swift', 'SwiftUI', 'Core Audio', 'AVFoundation'],
+    impact: 'Bit-perfect lossless playback on iPhone & Mac — in private development, waitlist open.',
     imgLabel: 'kord · now playing',
-    liveUrl: 'https://github.com/AndresASJ/FlacPlayer-Feedback',
+    liveUrl: 'https://kordsound.com',
     repoUrl: 'https://github.com/AndresASJ/FlacPlayer-Feedback',
     body: {
       problem:
-        'Most iOS music players quietly resample or transcode your files — so the lossless FLAC you ripped never reaches your ears untouched. For people who care about source fidelity, "lossless" on the box and bit-perfect at the output are not the same thing.',
+        'Most music players quietly resample or transcode your files — so the lossless FLAC you ripped never reaches your ears untouched. Between the file and the DAC sits a system mixer, hidden EQ, and loudness normalization. For people who care about the recording, "lossless" on the box and bit-perfect at the output are not the same thing.',
       approach:
-        'I went iPhone-first and built up from the audio path: decode FLAC natively, hand samples to the output device without an intermediate resampling step, and keep the library and metadata model simple enough to stay fast on a phone. The marketing and download surface lives in a separate static site (Kord), and support runs through a public feedback tracker.',
+        'I built Kord up from the signal path, native in Swift for both the iPhone in your pocket and the rig on your desk. Decode FLAC bit-for-bit, switch the hardware sample rate to match the file, and hand the samples to the DAC with nothing in between — direct USB-C DAC output on iPhone, exclusive CoreAudio hardware access on Mac. Everything else (EQ, lyrics, library) is built to put you closer to the master, never between you and it.',
       built: [
         {
-          h: 'Bit-perfect audio engine',
-          d: 'A FLAC playback path in Swift that avoids resampling, aiming to match the source stream sample-for-sample on supported output devices.',
+          h: 'Bit-perfect playback',
+          d: 'FLAC decoded bit-for-bit with automatic sample-rate switching to match each file — no resampling, no system mixer in the path, no secret normalization. Direct DAC output on iPhone; exclusive hardware access on Mac.',
         },
         {
-          h: 'SwiftUI library',
-          d: 'A native, gesture-driven library and now-playing UI focused on local files, fast scrolling and clean metadata.',
+          h: 'Parametric EQ',
+          d: 'Real per-band control — center frequency, gain and Q on every band — with saveable presets per device and instant bypass to A/B against the untouched signal.',
         },
         {
-          h: 'Public feedback loop',
-          d: 'A dedicated GitHub tracker with structured issue forms for bugs, playback/audio-quality reports and feature requests, keeping the private codebase and public triage separate.',
+          h: 'Synced lyrics',
+          d: 'Line-by-line lyrics that move in time with the music, highlighted as you listen and never a beat behind.',
+        },
+        {
+          h: 'Self-organizing library',
+          d: 'Point Kord at a folder and it reads tags, groups albums and artists, fetches artwork and lets you browse by artist, album or decade — so you spend your time listening, not filing.',
         },
       ],
       outcome: [
-        { metric: 'Bit-perfect', label: 'lossless FLAC, no resampling' },
-        { metric: 'iOS', label: 'native SwiftUI, iPhone-first' },
-        { metric: 'Beta', label: 'multiplatform support planned' },
+        { metric: 'Bit-perfect', label: 'FLAC, no resampling in the path' },
+        { metric: 'iPhone & Mac', label: 'native Swift, universal purchase' },
+        { metric: 'iOS 17 · macOS 14', label: 'private dev — waitlist open' },
       ],
       learnings:
-        'Shipping a real app means owning the boring edges — codecs, output routing, metadata weirdness, and a support channel — long before any of it is glamorous. Keeping triage public and the source private turned out to be a clean way to involve users without exposing the build.',
-      gallery: ['now playing', 'library view', 'feedback tracker'],
+        'Shipping a real audio app means owning the unglamorous edges — sample-rate switching, DAC routing, metadata weirdness, a support channel — long before any of it is visible. Keeping the source private but triage public (a feedback tracker with structured issue forms) turned out to be a clean way to involve listeners without exposing the build.',
+      gallery: ['now playing', 'parametric EQ', 'library view'],
     },
   },
   {
@@ -320,7 +324,7 @@ export const projects: Project[] = [
 export const socials: Social[] = [
   { label: 'GitHub', href: 'https://github.com/AndresASJ' },
   { label: 'LinkedIn', href: 'https://linkedin.com' }, // TODO: your LinkedIn URL
-  { label: 'Kord', href: 'https://github.com/AndresASJ/kord-site' },
+  { label: 'Kord', href: 'https://kordsound.com' },
 ];
 
 export const marqueeItems: string[] = [
