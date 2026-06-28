@@ -59,7 +59,7 @@ export const site = {
   availability: 'Open to software engineering roles · 2026',
   tagline:
     'I build things end-to-end — a native lossless audio player, a self-hosted homelab, and the computer-vision and algorithm projects in between.',
-  resumeUrl: '#', // TODO: drop a résumé PDF in public/assets/ and link it here.
+  resumeUrl: '#', // TODO: drop a resume PDF in public/assets/ and link it here.
 };
 
 export const projects: Project[] = [
