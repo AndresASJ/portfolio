@@ -2,13 +2,14 @@
 import { url } from '../lib/url';
 
 export interface Props {
-  active?: 'work' | 'writing' | 'about' | 'contact' | null;
+  active?: 'work' | 'writing' | 'credentials' | 'about' | 'contact' | null;
 }
 const { active = null } = Astro.props;
 
 const links = [
   { label: 'Work', href: url('/work'), key: 'work' },
   { label: 'Writing', href: url('/writing'), key: 'writing' },
+  { label: 'Credentials', href: url('/credentials'), key: 'credentials' },
   { label: 'About', href: url('/about'), key: 'about' },
   { label: 'Contact', href: url('/contact'), key: 'contact' },
 ];
@@ -160,6 +161,11 @@ const links = [
   @media (max-width: 560px) {
     .nav {
       gap: 14px;
+      overflow-x: auto;
+      scrollbar-width: none;
+    }
+    .nav::-webkit-scrollbar {
+      display: none;
     }
     .nav__link {
       font-size: 14px;
