@@ -59,7 +59,7 @@ export const site = {
   availability: 'Open to software engineering roles · 2026',
   tagline:
     'I build things end-to-end — a native lossless audio player, a self-hosted homelab, and the computer-vision and algorithm projects in between.',
-  resumeUrl: '#', // TODO: drop a resume PDF in public/assets/ and link it here.
+  resumeUrl: '/assets/Andres_Jimenez_Resume.pdf',
 };
 
 export const projects: Project[] = [
@@ -112,20 +112,20 @@ export const projects: Project[] = [
     },
   },
   {
-    id: 'homelab-cm5388',
-    title: 'CM5388 Homelab',
+    id: 'homelab-cm3588',
+    title: 'CM3588 Homelab',
     year: '2026',
     summary:
-      'A complete, reproducible self-hosted stack on a single FriendlyElec CM5388 board — 20+ services, fully containerized, documented to rebuild from scratch.',
+      'A complete, reproducible self-hosted stack on a single FriendlyElec CM3588 board — 20+ services, fully containerized, documented to rebuild from scratch.',
     role: 'Maintainer',
     timeframe: '2024 — present',
     status: 'Shipped',
     category: 'Infra / Self-hosting',
     stack: ['Docker', 'Docker Compose', 'Linux', 'CasaOS'],
     impact: '20+ self-hosted services on one ARM SBC, kill-switched VPN, remote-accessible.',
-    imgLabel: 'cm5388 · service dashboard',
-    liveUrl: 'https://github.com/AndresASJ/Friendly-Elec-CM5388',
-    repoUrl: 'https://github.com/AndresASJ/Friendly-Elec-CM5388',
+    imgLabel: 'cm3588 · service dashboard',
+    liveUrl: 'https://github.com/AndresASJ/Friendly-Elec-CM3588',
+    repoUrl: 'https://github.com/AndresASJ/Friendly-Elec-CM3588',
     body: {
       problem:
         'Self-hosting usually ends up as a pile of undocumented containers that only the person who built it can operate — and that nobody, including future-you, can rebuild after a disk dies.',
@@ -281,44 +281,6 @@ export const projects: Project[] = [
       gallery: ['map output'],
     },
   },
-  {
-    id: 'cheapest-link',
-    title: 'Cheapest-Link',
-    year: '2026',
-    summary:
-      'A C++ implementation of the cheapest-link heuristic for the Traveling Salesman Problem — building a near-optimal tour edge by edge.',
-    role: 'Solo Developer',
-    timeframe: '2026',
-    status: 'Shipped',
-    category: 'Algorithms',
-    stack: ['C++'],
-    impact: 'Greedy TSP tour construction via the cheapest-link heuristic.',
-    imgLabel: 'cheapest-link · tour graph',
-    repoUrl: 'https://github.com/AndresASJ/Cheapest-Link',
-    body: {
-      problem:
-        'The Traveling Salesman Problem is intractable to solve exactly at scale, so you reach for heuristics that get close, fast — and implementing them well is a real exercise in graph data structures.',
-      approach:
-        'I implemented the cheapest-link algorithm in C++: repeatedly add the lowest-cost edge that doesn’t create a vertex of degree three or a premature cycle, until a single Hamiltonian circuit forms.',
-      built: [
-        {
-          h: 'Greedy edge selection',
-          d: 'Sorts candidate edges by weight and adds them under the cheapest-link constraints (degree ≤ 2, no early cycles).',
-        },
-        {
-          h: 'Tour assembly',
-          d: 'Tracks partial paths and closes the final Hamiltonian circuit once enough edges are committed.',
-        },
-      ],
-      outcome: [
-        { metric: 'TSP', label: 'near-optimal tour heuristic' },
-        { metric: 'C++', label: 'graph & edge data structures' },
-      ],
-      learnings:
-        'Heuristics live and die by their constraints. Most of the work was in the bookkeeping — detecting premature cycles and degree violations — not the greedy step itself.',
-      gallery: [],
-    },
-  },
 ];
 
 export const socials: Social[] = [
@@ -341,7 +303,7 @@ export const marqueeItems: string[] = [
 ];
 
 // Stack filter options offered on the Work page.
-export const stackOptions = ['All', 'Swift', 'Python', 'C++', 'Docker', 'OpenCV', 'Pygame'];
+export const stackOptions = ['All', 'Swift', 'Python', 'Docker', 'OpenCV', 'Pygame'];
 
 // Helpers ------------------------------------------------------------------
 

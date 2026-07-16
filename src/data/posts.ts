@@ -60,7 +60,7 @@ export const posts: Post[] = [
     tag: 'Self-hosting',
     read: '5 min',
     excerpt:
-      'Turning a FriendlyElec CM5388 into a documented, reproducible homelab — and why the docs matter more than the containers.',
+      'Turning a FriendlyElec CM3588 into a documented, reproducible homelab — and why the docs matter more than the containers.',
     body: [
       {
         type: 'p',
