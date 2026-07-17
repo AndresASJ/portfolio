@@ -54,6 +54,7 @@ export interface Project {
   hero?: MediaRef;
   feat?: MediaRef;
   liveUrl?: string;
+  liveLabel?: string;
   repoUrl?: string;
   body: CaseBody;
 }
@@ -261,42 +262,48 @@ export const projects: Project[] = [
     title: 'PythonChess',
     year: '2025',
     summary:
-      'A full chess game in Python with a Pygame GUI — complete rule enforcement, move highlighting, and check/checkmate detection.',
+      'A two-player chess game written in Python and Pygame, now running in the browser from the same source through WebAssembly.',
     role: 'Solo Developer',
     timeframe: '2025',
     status: 'Shipped',
     category: 'Games',
-    stack: ['Python', 'Pygame'],
-    impact: 'Standard chess rules with check & checkmate detection and a clickable board.',
-    imgLabel: 'pythonchess · board',
-    liveUrl: 'https://github.com/AndresASJ/PythonChess',
+    stack: ['Python', 'Pygame', 'WebAssembly'],
+    impact: 'One Python codebase playable on desktop and directly in the browser.',
+    imgLabel: 'pythonchess · browser edition',
+    liveUrl: '/games/pythonchess/',
+    liveLabel: 'play',
     repoUrl: 'https://github.com/AndresASJ/PythonChess',
     body: {
       problem:
-        'Implementing chess properly forces you to encode every rule precisely — legal moves per piece, turn order, and the recursive question of whether a move leaves your own king in check.',
+        'Building chess from scratch forces every move to be made explicit: piece geometry, blocked paths, turn order, pinned pieces, and the recursive question of whether a move exposes your own king. The original game was also desktop-only, which made it difficult to experience from a portfolio.',
       approach:
-        'I modelled the board and pieces explicitly, generated valid moves per piece type, and layered check/checkmate detection on top of game-state tracking, with a Pygame GUI that highlights selections and legal targets.',
+        'I modelled the board and pieces explicitly, separated movement from rendering, and filtered candidate moves against the resulting king state. For the portfolio build, the existing Python modules and Pygame interface are packaged with CPython and pygame-ce for WebAssembly rather than rewritten in JavaScript.',
       built: [
         {
           h: 'Rules engine',
-          d: 'Standard movement for every piece, turn-based play, and game-state tracking.',
+          d: 'Movement for every piece, blocked-path validation, turn-based play, king-safety filtering, and automatic queen promotion.',
         },
         {
           h: 'Check & checkmate detection',
-          d: 'Validates that moves don’t leave the king in check and detects terminal positions.',
+          d: 'Validates that moves don’t leave the king in check and detects checkmate and stalemate positions.',
         },
         {
           h: 'Interactive board',
-          d: 'A Pygame UI that highlights the selected piece and its valid moves and shows game status.',
+          d: 'A Pygame UI with legal-move and capture markers, conventional White/Black presentation, game status, and instant restart.',
+        },
+        {
+          h: 'Python in the browser',
+          d: 'The original Python board, piece, GUI, and main-loop modules run through WebAssembly inside this case study—no JavaScript rules-engine replacement.',
         },
       ],
       outcome: [
-        { metric: 'Full rules', label: 'every piece, legal moves' },
-        { metric: 'Check / mate', label: 'detection built in' },
+        { metric: '1 codebase', label: 'desktop + browser' },
+        { metric: 'Python → WASM', label: 'original source, web runtime' },
+        { metric: '5 tests', label: 'movement and check regressions' },
       ],
       learnings:
-        'A clear separation between game state and rendering kept the rule logic testable. Chess is a great forcing function for thinking about edge cases you’d otherwise skip.',
-      gallery: [{ src: 'pychess-g1', alt: 'move highlighting' }],
+        'A clear separation between game state and rendering made it possible to repair rule edge cases and move the same Pygame project into a browser. The web build preserves the original work while making it immediately testable by anyone visiting the portfolio.',
+      gallery: [],
     },
   },
   {

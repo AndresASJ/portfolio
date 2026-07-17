@@ -56,7 +56,7 @@ const sections = [
         {
           p.liveUrl && (
             <a class="case-link case-link--solid" href={p.liveUrl} target="_blank" rel="noopener noreferrer">
-              live ↗
+              {p.liveLabel ?? 'live'} ↗
             </a>
           )
         }
@@ -72,26 +72,88 @@ const sections = [
   </section>
 
   <!-- Hero image -->
-  <section class="wrap-wide case-hero">
-    <div
-      class="case-hero__img img-ph"
-      data-reveal
-      style={`view-transition-name: vt-${p.id}`}
-    >
-      <Media
-        src={p.hero?.src}
-        alt={p.hero?.alt}
-        label={`[ ${p.imgLabel} ]`}
-        widths={[720, 1440, 2160]}
-        sizes="(max-width: 1180px) 100vw, 1036px"
-        loading="eager"
-        fetchpriority="high"
-      />
-    </div>
-    <div class="case-hero__stack">
-      {p.stack.map((t) => <span class="tag">{t}</span>)}
-    </div>
-  </section>
+  {
+    p.id !== 'pychess' && (
+      <section class="wrap-wide case-hero">
+        <div
+          class="case-hero__img img-ph"
+          data-reveal
+          style={`view-transition-name: vt-${p.id}`}
+        >
+          <Media
+            src={p.hero?.src}
+            alt={p.hero?.alt}
+            label={`[ ${p.imgLabel} ]`}
+            widths={[720, 1440, 2160]}
+            sizes="(max-width: 1180px) 100vw, 1036px"
+            loading="eager"
+            fetchpriority="high"
+          />
+        </div>
+        <div class="case-hero__stack">
+          {p.stack.map((t) => <span class="tag">{t}</span>)}
+        </div>
+      </section>
+    )
+  }
+
+  {
+    p.id === 'pychess' && (
+      <section class="wrap-wide playable" id="play">
+        <div class="playable__head" data-reveal>
+          <div>
+            <div class="playable__eyebrow">// playable build</div>
+            <h2 class="playable__title">Play the original Python game.</h2>
+          </div>
+          <div>
+            <p class="playable__note">
+              Two players, one device. Select a piece, then choose a highlighted legal move.
+              Press R or use New Game to restart.
+            </p>
+            <div class="playable__tags" aria-label="Technologies used">
+              {p.stack.map((t) => <span class="tag">{t}</span>)}
+            </div>
+          </div>
+        </div>
+        <div class="playable__shell" data-reveal>
+          <div class="playable__toolbar">
+            <div class="playable__runtime">
+              <span class="playable__dot" aria-hidden="true"></span>
+              Python · browser build
+            </div>
+            <div class="playable__actions">
+              <a href={p.repoUrl} target="_blank" rel="noopener noreferrer">source ↗</a>
+              <a class="playable__open" href={url('/games/pythonchess/')} target="_blank" rel="noopener noreferrer">
+                open full screen ↗
+              </a>
+            </div>
+          </div>
+          <div class="playable__frame">
+            <iframe
+              src={url('/games/pythonchess/index.html')}
+              title="Playable ASJ PythonChess browser edition"
+              loading="eager"
+              allow="fullscreen"
+            >
+              <a href={url('/games/pythonchess/')}>Open the playable PythonChess build</a>
+            </iframe>
+          </div>
+        </div>
+        <div class="playable__details" data-reveal>
+          <p class="playable__source">
+            Running the project's Python board, piece, GUI, and main-loop modules through
+            CPython + Pygame WebAssembly—not a JavaScript recreation.
+          </p>
+          <ul class="playable__features" aria-label="Features in this build">
+            <li>Legal-move highlighting</li>
+            <li>King-safety validation</li>
+            <li>Checkmate &amp; stalemate</li>
+            <li>Instant restart</li>
+          </ul>
+        </div>
+      </section>
+    )
+  }
 
   <!-- Body sections -->
   <section class="wrap-mid case-body">
@@ -343,6 +405,141 @@ const sections = [
     margin-top: 18px;
   }
 
+  /* --- Playable PythonChess build --- */
+  .playable {
+    padding-top: clamp(8px, 2vw, 24px);
+    padding-bottom: clamp(36px, 6vw, 80px);
+    scroll-margin-top: 88px;
+  }
+  .playable__head {
+    display: grid;
+    grid-template-columns: minmax(0, 1fr) minmax(260px, 0.7fr);
+    gap: clamp(24px, 5vw, 72px);
+    align-items: end;
+    margin-bottom: 24px;
+  }
+  .playable__eyebrow {
+    font-family: var(--font-mono);
+    font-size: 12px;
+    letter-spacing: 0.1em;
+    text-transform: uppercase;
+    color: var(--accent);
+    margin-bottom: 10px;
+  }
+  .playable__title {
+    margin: 0;
+    font-family: var(--font-serif);
+    font-weight: 500;
+    font-size: clamp(30px, 4vw, 52px);
+    line-height: 1.05;
+    color: var(--ink);
+  }
+  .playable__note,
+  .playable__source {
+    margin: 0;
+    color: var(--ink-2);
+    line-height: 1.6;
+  }
+  .playable__tags {
+    display: flex;
+    flex-wrap: wrap;
+    gap: 8px;
+    margin-top: 16px;
+  }
+  .playable__shell,
+  .playable__details {
+    width: min(100%, 720px, 78vh);
+    width: min(100%, 720px, 78svh);
+    margin-left: auto;
+    margin-right: auto;
+  }
+  .playable__shell {
+    overflow: hidden;
+    border: 1px solid var(--line);
+    border-radius: 16px;
+    background: #161619;
+    box-shadow: 0 24px 80px rgb(0 0 0 / 0.18);
+  }
+  .playable__toolbar {
+    min-height: 52px;
+    padding: 10px 12px 10px 16px;
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    gap: 12px;
+    background: var(--paper);
+    border-bottom: 1px solid var(--line);
+    font-family: var(--font-mono);
+    font-size: 11px;
+  }
+  .playable__runtime {
+    display: inline-flex;
+    align-items: center;
+    gap: 8px;
+    color: var(--ink-2);
+    white-space: nowrap;
+  }
+  .playable__dot {
+    width: 7px;
+    height: 7px;
+    border-radius: 50%;
+    background: #55b685;
+    box-shadow: 0 0 0 4px rgb(85 182 133 / 0.12);
+  }
+  .playable__actions {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+  }
+  .playable__actions a {
+    color: var(--ink-2);
+    text-decoration: none;
+  }
+  .playable__actions a:hover {
+    color: var(--ink);
+  }
+  .playable__actions .playable__open {
+    padding: 7px 10px;
+    border: 1px solid var(--line);
+    border-radius: 999px;
+    color: var(--ink);
+  }
+  .playable__frame {
+    aspect-ratio: 720 / 816;
+    overflow: hidden;
+    background: #161619;
+  }
+  .playable__frame iframe {
+    display: block;
+    width: 100%;
+    height: 100%;
+    border: 0;
+  }
+  .playable__details {
+    margin-top: 18px;
+  }
+  .playable__source {
+    margin: 0;
+    font-family: var(--font-mono);
+    font-size: 12px;
+  }
+  .playable__features {
+    display: grid;
+    grid-template-columns: repeat(2, minmax(0, 1fr));
+    gap: 8px 18px;
+    margin: 16px 0 0;
+    padding: 0;
+    list-style: none;
+    font-size: 13px;
+    color: var(--ink-2);
+  }
+  .playable__features li::before {
+    content: '✓';
+    margin-right: 8px;
+    color: var(--accent);
+    font-family: var(--font-mono);
+  }
+
   /* --- Body --- */
   .case-body {
     padding-top: clamp(24px, 4vw, 48px);
@@ -378,6 +575,31 @@ const sections = [
     line-height: 1.45;
     color: var(--ink);
     margin: 0;
+  }
+
+  @media (max-width: 680px) {
+    .playable__head {
+      grid-template-columns: 1fr;
+    }
+    .playable__toolbar {
+      align-items: flex-start;
+    }
+    .playable__actions {
+      justify-content: flex-end;
+      flex-wrap: wrap;
+    }
+    .playable__features {
+      grid-template-columns: 1fr;
+    }
+  }
+
+  @media (max-width: 460px) {
+    .playable__runtime {
+      display: none;
+    }
+    .playable__toolbar {
+      justify-content: flex-end;
+    }
   }
 
   .built {
