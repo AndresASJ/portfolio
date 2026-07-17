@@ -1,0 +1,98 @@
+---
+// Fills an image slot, or falls back to the hatch placeholder when the project
+// has no photography yet. Renders only the fill layer — the sized wrapper
+// (.card__img, .case-hero__img, …) stays in the page, because those classes are
+// scoped to their page's <style> block and would lose their CSS if they moved
+// in here. Every wrapper carries .img-ph, which supplies the position: relative
+// and overflow: hidden that the absolutely-positioned fill needs.
+import { Image } from 'astro:assets';
+import { url } from '../lib/url';
+
+export interface Props {
+  // Basename of a file under src/assets/, without extension.
+  src?: string;
+  alt?: string;
+  // Muted loop played on hover, e.g. '/media/work/kord-card.mp4'.
+  video?: string;
+  // Placeholder text, shown when there's no image to draw.
+  label: string;
+  index?: string;
+  widths?: number[];
+  sizes?: string;
+  loading?: 'lazy' | 'eager';
+  fetchpriority?: 'high' | 'auto';
+}
+
+const {
+  src,
+  alt = '',
+  video,
+  label,
+  index,
+  widths = [480, 960, 1440],
+  sizes = '100vw',
+  loading = 'lazy',
+  fetchpriority = 'auto',
+} = Astro.props;
+
+const images = import.meta.glob<ImageMetadata>(
+  '/src/assets/**/*.{png,jpg,jpeg,webp,avif}',
+  { eager: true, import: 'default' }
+);
+
+const resolved = src
+  ? Object.entries(images).find(([k]) => k.includes(`/${src}.`))?.[1]
+  : undefined;
+---
+
+{
+  resolved ? (
+    <Fragment>
+      <Image
+        src={resolved}
+        alt={alt}
+        widths={widths}
+        sizes={sizes}
+        loading={loading}
+        fetchpriority={fetchpriority}
+        class="m__img"
+      />
+      {video && (
+        <video
+          class="m__vid"
+          muted
+          loop
+          playsinline
+          preload="none"
+          aria-hidden="true"
+          data-hover-video
+          data-src={url(video)}
+        />
+      )}
+    </Fragment>
+  ) : (
+    <Fragment>
+      <div class="img-ph__label">{label}</div>
+      {index && <div class="img-ph__index">{'/ ' + index}</div>}
+    </Fragment>
+  )
+}
+
+<style>
+  .m__img,
+  .m__vid {
+    position: absolute;
+    inset: 0;
+    width: 100%;
+    height: 100%;
+    object-fit: cover;
+  }
+  /* The image doubles as the video's poster — no separate poster asset. */
+  .m__vid {
+    opacity: 0;
+    transition: opacity 0.35s ease;
+  }
+  .m__vid.is-playing {
+    opacity: 1;
+  }
+</style>

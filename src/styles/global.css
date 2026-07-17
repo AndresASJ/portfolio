@@ -316,6 +316,19 @@ textarea:focus {
   transform: none;
 }
 
+/* Cross-document view transitions — the card image morphs into the case-study
+   hero on navigation. CSS-only on purpose: Astro's <ClientRouter /> would mean
+   rehydrating the filter script, the one-shot reveal observer and the theme
+   script on every nav. Unsupported browsers just navigate normally.
+   Each pairing gets its own view-transition-name (vt-<project id>), set inline
+   at the call sites — duplicate names on one page abort the transition. */
+@view-transition {
+  navigation: auto;
+}
+::view-transition-group(*) {
+  animation-duration: 0.35s;
+}
+
 @media (prefers-reduced-motion: reduce) {
   *,
   *::before,
@@ -330,5 +343,8 @@ textarea:focus {
   [data-reveal] {
     opacity: 1 !important;
     transform: none !important;
+  }
+  @view-transition {
+    navigation: none;
   }
 }

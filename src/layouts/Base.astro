@@ -16,9 +16,12 @@ const {
 } = Astro.props;
 
 const canonical = new URL(Astro.url.pathname, Astro.site).href;
-// SVG OG card ships by default; export a 1200×630 PNG to public/assets/og.png
-// and switch this to 'assets/og.png' for maximum social-preview compatibility.
-const ogImage = new URL('assets/og.svg', Astro.site).href;
+// PNG, not SVG: Slack, iMessage, X, LinkedIn and Facebook all ignore an SVG
+// og:image and show no preview at all. public/assets/og.svg stays the editable
+// source — re-render it to og.png (1200×630) after any edit. Render locally
+// rather than in CI: the card is set in JetBrains Mono and Newsreader, which a
+// build runner doesn't have.
+const ogImage = new URL('assets/og.png', Astro.site).href;
 ---
 
 <!doctype html>
@@ -37,10 +40,16 @@ const ogImage = new URL('assets/og.svg', Astro.site).href;
     <meta property="og:description" content={description} />
     <meta property="og:url" content={canonical} />
     <meta property="og:image" content={ogImage} />
+    <!-- Dimensions let scrapers lay the large card out before fetching it. -->
+    <meta property="og:image:type" content="image/png" />
+    <meta property="og:image:width" content="1200" />
+    <meta property="og:image:height" content="630" />
+    <meta property="og:image:alt" content="Andres Jimenez — software engineer" />
     <meta name="twitter:card" content="summary_large_image" />
     <meta name="twitter:title" content={title} />
     <meta name="twitter:description" content={description} />
     <meta name="twitter:image" content={ogImage} />
+    <meta name="twitter:image:alt" content="Andres Jimenez — software engineer" />
 
     <!-- Set theme before paint to avoid a flash of the wrong theme -->
     <script is:inline>
@@ -91,6 +100,61 @@ const ogImage = new URL('assets/og.svg', Astro.site).href;
           { threshold: 0.1, rootMargin: '0px 0px -6% 0px' }
         );
         els.forEach((el) => io.observe(el));
+      }
+    </script>
+
+    <!-- Hover-to-play card loops. The still behind the video acts as the poster. -->
+    <script>
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const vids = Array.from(
+          document.querySelectorAll('[data-hover-video]')
+        ) as HTMLVideoElement[];
+
+        vids.forEach((v) => {
+          const host = (v.closest('a') ?? v.parentElement) as HTMLElement | null;
+          if (!host) return;
+          let loaded = false;
+          let hovering = false;
+
+          const attempt = () => {
+            // Rejects with AbortError if the pointer leaves mid-play.
+            v.play()
+              .then(() => {
+                // The pointer may already be gone by the time this resolves.
+                if (hovering) v.classList.add('is-playing');
+                else v.pause();
+              })
+              .catch(() => {});
+          };
+
+          const play = (e?: PointerEvent) => {
+            // Touch fires pointerenter on the tap that navigates away — don't
+            // pull down a video we're about to leave.
+            if (e && e.pointerType !== 'mouse') return;
+            hovering = true;
+            if (!loaded) {
+              loaded = true;
+              // Under preload="none" nothing is fetched until play() asks for
+              // it, so assign the source and let play() start the download.
+              v.src = v.dataset.src || '';
+            }
+            attempt();
+          };
+
+          const stop = () => {
+            hovering = false;
+            v.pause();
+            v.currentTime = 0;
+            v.classList.remove('is-playing');
+          };
+
+          host.addEventListener('pointerenter', play);
+          host.addEventListener('pointerleave', stop);
+          // focus doesn't bubble; focusin does.
+          host.addEventListener('focusin', () => play());
+          host.addEventListener('focusout', stop);
+          v.addEventListener('stop-hover-video', stop);
+        });
       }
     </script>
   </body>

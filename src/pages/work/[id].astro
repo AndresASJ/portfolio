@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import Media from '../../components/Media.astro';
 import { url } from '../../lib/url';
 import { projects, indexLabel, statusDotColor } from '../../data/portfolio';
 
@@ -72,8 +73,20 @@ const sections = [
 
   <!-- Hero image -->
   <section class="wrap-wide case-hero">
-    <div class="case-hero__img img-ph" data-reveal>
-      <div class="img-ph__label">[ {p.imgLabel} ]</div>
+    <div
+      class="case-hero__img img-ph"
+      data-reveal
+      style={`view-transition-name: vt-${p.id}`}
+    >
+      <Media
+        src={p.hero?.src}
+        alt={p.hero?.alt}
+        label={`[ ${p.imgLabel} ]`}
+        widths={[720, 1440, 2160]}
+        sizes="(max-width: 1180px) 100vw, 1036px"
+        loading="eager"
+        fetchpriority="high"
+      />
     </div>
     <div class="case-hero__stack">
       {p.stack.map((t) => <span class="tag">{t}</span>)}
@@ -150,9 +163,18 @@ const sections = [
         <div class="case-gallery__eyebrow" data-reveal>// gallery</div>
         <div class="case-gallery__grid" data-reveal>
           {b.gallery.map((g) => (
-            <div class="case-gallery__cell img-ph">
-              <div class="img-ph__label">{g}</div>
-            </div>
+            <figure class="case-gallery__fig">
+              <div class="case-gallery__cell img-ph">
+                <Media
+                  src={g.src}
+                  alt={g.alt}
+                  label={g.alt}
+                  widths={[320, 640, 960]}
+                  sizes="(max-width: 640px) 100vw, 330px"
+                />
+              </div>
+              {g.caption && <figcaption class="case-gallery__cap">{g.caption}</figcaption>}
+            </figure>
           ))}
         </div>
       </section>
@@ -436,9 +458,19 @@ const sections = [
     grid-template-columns: repeat(auto-fit, minmax(240px, 1fr));
     gap: 18px;
   }
+  .case-gallery__fig {
+    margin: 0;
+  }
   .case-gallery__cell {
     aspect-ratio: 4 / 3;
     border-radius: 10px;
+  }
+  .case-gallery__cap {
+    margin-top: 10px;
+    font-family: var(--font-mono);
+    font-size: 11px;
+    letter-spacing: 0.06em;
+    color: var(--ink-2);
   }
 
   /* --- Prev/next --- */

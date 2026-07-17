@@ -1,5 +1,6 @@
 ---
 import Base from '../../layouts/Base.astro';
+import Media from '../../components/Media.astro';
 import { url } from '../../lib/url';
 import {
   projects,
@@ -82,13 +83,21 @@ const cats = projectCategories();
             class="card"
             href={url(`/work/${p.id}`)}
             data-card
+            data-reveal
             data-category={p.category}
             data-stack={p.stack.join('|')}
             data-search={`${p.title} ${p.summary} ${p.stack.join(' ')} ${p.category} ${p.role}`.toLowerCase()}
           >
-            <div class="card__img img-ph">
-              <div class="img-ph__label">{p.imgLabel}</div>
-              <div class="img-ph__index">{'/ ' + indexLabel(i)}</div>
+            <div class="card__img img-ph" style={`view-transition-name: vt-${p.id}`}>
+              <Media
+                src={p.card?.src}
+                alt={p.card?.alt}
+                video={p.cardVideo}
+                label={p.imgLabel}
+                index={indexLabel(i)}
+                widths={[380, 760, 1140]}
+                sizes="(max-width: 860px) 100vw, 380px"
+              />
               <div
                 class:list={[
                   'status',
@@ -160,6 +169,13 @@ const cats = projectCategories();
       if (state.stack !== 'All' && !stacks.includes(state.stack)) show = false;
       if (q && !hay.includes(q)) show = false;
       card.hidden = !show;
+      // A card hidden under the cursor never gets pointerleave, so its loop
+      // would keep playing invisibly.
+      if (!show) {
+        card
+          .querySelectorAll('[data-hover-video]')
+          .forEach((v) => v.dispatchEvent(new CustomEvent('stop-hover-video')));
+      }
       if (show) visible++;
     });
 

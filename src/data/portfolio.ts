@@ -17,13 +17,22 @@ export interface OutcomeStat {
   label: string;
 }
 
+// A picture. `src` is the basename of a file in src/assets/work/ (no extension);
+// leave a media field off entirely and the slot falls back to its hatch
+// placeholder, so projects can get their photography one at a time.
+export interface MediaRef {
+  src: string;
+  alt: string;
+  caption?: string;
+}
+
 export interface CaseBody {
   problem: string;
   approach: string;
   built: BuiltItem[];
   outcome: OutcomeStat[];
   learnings: string;
-  gallery: string[];
+  gallery: MediaRef[];
 }
 
 export interface Project {
@@ -37,7 +46,13 @@ export interface Project {
   category: string;
   stack: string[];
   impact: string;
+  // Shown inside the placeholder when a slot has no image yet.
   imgLabel: string;
+  card?: MediaRef;
+  // Muted loop played on card hover. Lives in public/media/work/.
+  cardVideo?: string;
+  hero?: MediaRef;
+  feat?: MediaRef;
   liveUrl?: string;
   repoUrl?: string;
   body: CaseBody;
@@ -62,6 +77,12 @@ export const site = {
   resumeUrl: '/assets/Andres_Jimenez_Resume.pdf',
 };
 
+// Shown in the 4/5 portrait slots on / and /about.
+export const portrait: MediaRef = {
+  src: 'portrait',
+  alt: 'Andres Jimenez',
+};
+
 export const projects: Project[] = [
   {
     id: 'kord',
@@ -76,6 +97,19 @@ export const projects: Project[] = [
     stack: ['Swift', 'SwiftUI', 'Core Audio', 'AVFoundation'],
     impact: 'Bit-perfect lossless playback on iPhone & Mac — in private development, waitlist open.',
     imgLabel: 'kord · now playing',
+    card: {
+      src: 'kord-card',
+      alt: 'Kord on macOS — library home with Heavy Rotation, Recently Added and Hi-Res shelves',
+    },
+    cardVideo: '/media/work/kord-card.mp4',
+    hero: {
+      src: 'kord-hero',
+      alt: 'Kord’s library on macOS, showing album shelves and 24/192 hi-res badges',
+    },
+    feat: {
+      src: 'kord-feat',
+      alt: 'Kord on macOS — library home with album artwork and Browse by Decade',
+    },
     liveUrl: 'https://kordsound.com',
     repoUrl: 'https://github.com/AndresASJ/FlacPlayer-Feedback',
     body: {
@@ -108,7 +142,23 @@ export const projects: Project[] = [
       ],
       learnings:
         'Shipping a real audio app means owning the unglamorous edges — sample-rate switching, DAC routing, metadata weirdness, a support channel — long before any of it is visible. Keeping the source private but triage public (a feedback tracker with structured issue forms) turned out to be a clean way to involve listeners without exposing the build.',
-      gallery: ['now playing', 'parametric EQ', 'library view'],
+      gallery: [
+        {
+          src: 'kord-g1',
+          alt: 'Kord Now Playing — album art, transport, synced lyric line and a LOSSLESS · FLAC 16/44.1 badge',
+          caption: 'now playing · synced lyrics',
+        },
+        {
+          src: 'kord-g2',
+          alt: 'Kord’s album grid, showing artwork read from file tags',
+          caption: 'self-organizing library',
+        },
+        {
+          src: 'kord-g3',
+          alt: 'Kord’s artist grid with fetched artist photography',
+          caption: 'browse by artist',
+        },
+      ],
     },
   },
   {
@@ -152,7 +202,11 @@ export const projects: Project[] = [
       ],
       learnings:
         'Infrastructure you can’t rebuild is a liability, not an asset. Writing the docs as I went — to the point a stranger could reproduce the stack — was the difference between a hobby and something I actually trust.',
-      gallery: ['compose stack', 'VPN routing', 'remote access'],
+      gallery: [
+        { src: 'homelab-g1', alt: 'compose stack' },
+        { src: 'homelab-g2', alt: 'VPN routing' },
+        { src: 'homelab-g3', alt: 'remote access' },
+      ],
     },
   },
   {
@@ -196,7 +250,10 @@ export const projects: Project[] = [
       ],
       learnings:
         'Classic computer vision still goes a long way before you reach for a neural net. Getting the contour and warp stages right made recognition almost easy — most of the accuracy was won in preprocessing.',
-      gallery: ['detection overlay', 'template match'],
+      gallery: [
+        { src: 'card-detection-g1', alt: 'detection overlay' },
+        { src: 'card-detection-g2', alt: 'template match' },
+      ],
     },
   },
   {
@@ -239,7 +296,7 @@ export const projects: Project[] = [
       ],
       learnings:
         'A clear separation between game state and rendering kept the rule logic testable. Chess is a great forcing function for thinking about edge cases you’d otherwise skip.',
-      gallery: ['move highlighting'],
+      gallery: [{ src: 'pychess-g1', alt: 'move highlighting' }],
     },
   },
   {
@@ -278,7 +335,7 @@ export const projects: Project[] = [
       ],
       learnings:
         'Stitching a couple of focused APIs together with a clean output format turns a tedious manual task into a one-command tool — the kind of small utility you actually keep around.',
-      gallery: ['map output'],
+      gallery: [{ src: 'ip-data-g1', alt: 'map output' }],
     },
   },
 ];

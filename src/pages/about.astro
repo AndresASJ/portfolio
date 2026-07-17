@@ -1,7 +1,8 @@
 ---
 import Base from '../layouts/Base.astro';
+import Media from '../components/Media.astro';
 import { url } from '../lib/url';
-import { site } from '../data/portfolio';
+import { site, portrait } from '../data/portfolio';
 ---
 
 <Base
@@ -13,7 +14,15 @@ import { site } from '../data/portfolio';
     <div class="about__grid">
       <aside class="about__aside" data-reveal>
         <div class="about__portrait img-ph">
-          <div class="img-ph__label">[ portrait ]</div>
+          <Media
+            src={portrait.src}
+            alt={portrait.alt}
+            label="[ portrait ]"
+            widths={[340, 470, 940]}
+            sizes="(max-width: 760px) 100vw, 470px"
+            loading="eager"
+            fetchpriority="high"
+          />
         </div>
         <a class="about__resume" href={site.resumeUrl}>
           Download resume <span class="about__resume-meta">↓ pdf</span>
