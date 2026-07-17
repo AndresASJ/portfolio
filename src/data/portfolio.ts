@@ -270,6 +270,10 @@ export const projects: Project[] = [
     stack: ['Python', 'Pygame', 'WebAssembly'],
     impact: 'One Python codebase playable on desktop and directly in the browser.',
     imgLabel: 'pythonchess · browser edition',
+    card: {
+      src: 'pychess-card',
+      alt: 'PythonChess running in the browser with the white king pawn selected and its legal moves highlighted',
+    },
     liveUrl: '/games/pythonchess/',
     liveLabel: 'play',
     repoUrl: 'https://github.com/AndresASJ/PythonChess',
