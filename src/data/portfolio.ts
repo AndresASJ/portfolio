@@ -175,13 +175,25 @@ export const projects: Project[] = [
     stack: ['Docker', 'Docker Compose', 'Linux', 'CasaOS'],
     impact: '20+ self-hosted services on one ARM SBC, kill-switched VPN, remote-accessible.',
     imgLabel: 'cm3588 · service dashboard',
+    card: {
+      src: 'homelab-card',
+      alt: 'CasaOS dashboard on the CM3588 — system status, storage health and self-hosted app grid',
+    },
+    hero: {
+      src: 'homelab-hero',
+      alt: 'CasaOS dashboard on the CM3588 — CPU/RAM gauges, storage health and apps including Nginx Proxy Manager, Jellyfin, AdGuard Home, Immich, Seafile and Tailscale',
+    },
+    feat: {
+      src: 'homelab-feat',
+      alt: 'CasaOS dashboard on the CM3588 with system status widgets and the self-hosted app grid',
+    },
     liveUrl: 'https://github.com/AndresASJ/Friendly-Elec-CM3588',
     repoUrl: 'https://github.com/AndresASJ/Friendly-Elec-CM3588',
     body: {
       problem:
         'Self-hosting usually ends up as a pile of undocumented containers that only the person who built it can operate — and that nobody, including future-you, can rebuild after a disk dies.',
       approach:
-        'I treated the homelab as a living blueprint: every service is a sanitized Docker Compose file, every decision is written down, and the whole thing is reproducible from a freshly flashed board. CasaOS sits on top for day-to-day management; the docs carry the actual knowledge.',
+        'I treated the homelab as a living blueprint: every service is a sanitized Docker Compose file, every decision is written down, and the whole thing is reproducible from a freshly flashed board. CasaOS sits on top for day-to-day management; twenty numbered guides — from flashing the board and laying out storage to VPN routing and troubleshooting — carry the actual knowledge.',
       built: [
         {
           h: 'Containerized service stack',
@@ -195,18 +207,34 @@ export const projects: Project[] = [
           h: 'Secure remote access',
           d: 'Nginx Proxy Manager, Cloudflare Tunnel and Tailscale for getting in from anywhere without exposing the box directly.',
         },
+        {
+          h: 'One small board, real storage',
+          d: 'A FriendlyElec CM3588 — 8-core Rockchip RK3588, 16 GB RAM — running Ubuntu 22.04, with four NVMe drives laid out by role and a 2 TB USB drive on scheduled backups. No rack required.',
+        },
       ],
       outcome: [
         { metric: '20+', label: 'self-hosted services' },
-        { metric: '1', label: 'single-board computer (ARM64)' },
-        { metric: '100%', label: 'containerized & documented' },
+        { metric: '1', label: 'ARM board — 8-core, 16 GB' },
+        { metric: '20', label: 'numbered guides to rebuild it' },
       ],
       learnings:
         'Infrastructure you can’t rebuild is a liability, not an asset. Writing the docs as I went — to the point a stranger could reproduce the stack — was the difference between a hobby and something I actually trust.',
       gallery: [
-        { src: 'homelab-g1', alt: 'compose stack' },
-        { src: 'homelab-g2', alt: 'VPN routing' },
-        { src: 'homelab-g3', alt: 'remote access' },
+        {
+          src: 'homelab-g1',
+          alt: 'Immich photo library self-hosted on the CM3588, timeline view with 1.4 TiB stored',
+          caption: 'immich · self-hosted photos',
+        },
+        {
+          src: 'homelab-g2',
+          alt: 'AdGuard Home dashboard — 37,989 DNS queries in 24 hours, 12.5% blocked at the DNS level',
+          caption: 'adguard · dns-level ad-blocking',
+        },
+        {
+          src: 'homelab-g3',
+          alt: 'Tailscale admin view of the CM3588 as a connected tailnet device with SSH and subnet routing',
+          caption: 'tailscale · remote access',
+        },
       ],
     },
   },
