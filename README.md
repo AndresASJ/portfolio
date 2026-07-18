@@ -5,7 +5,7 @@ Editorial design: Newsreader (serif) + Hanken Grotesk (sans) + JetBrains Mono,
 warm-paper light theme and a dark theme, with a live-filtered work archive and a
 writing section.
 
-Implemented from a Claude Design handoff (`Andres Portfolio.dc.html`).
+Implemented from a static design handoff (`Andres Portfolio.dc.html`).
 
 ## Develop
 
