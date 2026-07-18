@@ -28,3 +28,8 @@ Thumbs.db
 
 # design handoff bundle (source mockup — not part of the build)
 handoff/
+
+# local agent instructions (kept off the public repo)
+AGENTS.md
+CLAUDE.md
+.claude/
