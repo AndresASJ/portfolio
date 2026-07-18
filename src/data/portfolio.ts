@@ -115,9 +115,9 @@ export const projects: Project[] = [
     repoUrl: 'https://github.com/AndresASJ/FlacPlayer-Feedback',
     body: {
       problem:
-        'Most music players quietly resample or transcode your files — so the lossless FLAC you ripped never reaches your ears untouched. Between the file and the DAC sits a system mixer, hidden EQ, and loudness normalization. For people who care about the recording, "lossless" on the box and bit-perfect at the output are not the same thing.',
+        'I kept buying FLACs on Bandcamp and Qobuz, and then had nowhere good to play them on my iPhone. The closest thing to a real local-file player on iOS was foobar2000. Even apps that advertise "lossless" tend to quietly resample or transcode on the way out, with a system mixer, hidden EQ, or loudness normalization sitting between the file and your DAC. The file you paid for never reaches your ears untouched.',
       approach:
-        'I built Kord up from the signal path, native in Swift for both the iPhone in your pocket and the rig on your desk. Decode FLAC bit-for-bit, switch the hardware sample rate to match the file, and hand the samples to the DAC with nothing in between — direct USB-C DAC output on iPhone, exclusive CoreAudio hardware access on Mac. Everything else (EQ, lyrics, library) is built to put you closer to the master, never between you and it.',
+        'So I built the player I wanted: made for audio gearheads, with an Apple philosophy. Kord is native Swift on both the iPhone in your pocket and the rig on your desk. It decodes FLAC bit-for-bit, switches the hardware sample rate to match the file, and hands the samples straight to the DAC — direct USB-C output on iPhone, exclusive CoreAudio hardware access on Mac. Everything else (EQ, lyrics, the library) exists to get you closer to the master, and stays out of the signal path.',
       built: [
         {
           h: 'Bit-perfect playback',
@@ -142,7 +142,7 @@ export const projects: Project[] = [
         { metric: 'iOS 17 · macOS 14', label: 'private dev — waitlist open' },
       ],
       learnings:
-        'Shipping a real audio app means owning the unglamorous edges — sample-rate switching, DAC routing, metadata weirdness, a support channel — long before any of it is visible. Keeping the source private but triage public (a feedback tracker with structured issue forms) turned out to be a clean way to involve listeners without exposing the build.',
+        'Shipping a real audio app means owning the unglamorous edges long before any of it is visible: sample-rate switching, DAC routing, metadata that lies about what a file really is, a support channel. Keeping the source private but the triage public, through a feedback tracker with structured issue forms, turned out to be a clean way to involve listeners without exposing the build.',
       gallery: [
         {
           src: 'kord-g1',
@@ -191,9 +191,9 @@ export const projects: Project[] = [
     repoUrl: 'https://github.com/AndresASJ/Friendly-Elec-CM3588',
     body: {
       problem:
-        'Self-hosting usually ends up as a pile of undocumented containers that only the person who built it can operate — and that nobody, including future-you, can rebuild after a disk dies.',
+        'I wanted my photos and files on hardware I own, backed up where no unwanted eyes can reach them, instead of renting that trust from Google. I also wanted a playground: a standing excuse to learn Linux as a server, Docker networking, and everything in between. The usual fate of a setup like this is a pile of undocumented containers that nobody can rebuild after a disk dies, including future-you.',
       approach:
-        'I treated the homelab as a living blueprint: every service is a sanitized Docker Compose file, every decision is written down, and the whole thing is reproducible from a freshly flashed board. CasaOS sits on top for day-to-day management; twenty numbered guides — from flashing the board and laying out storage to VPN routing and troubleshooting — carry the actual knowledge.',
+        'I treated the homelab as a living blueprint. Every service is a sanitized Docker Compose file, every decision is written down, and the whole stack can be reproduced from a freshly flashed board. CasaOS sits on top for day-to-day management; twenty numbered guides carry the actual knowledge, from flashing the board and laying out storage to VPN routing and troubleshooting.',
       built: [
         {
           h: 'Containerized service stack',
@@ -218,7 +218,7 @@ export const projects: Project[] = [
         { metric: '20', label: 'numbered guides to rebuild it' },
       ],
       learnings:
-        'Infrastructure you can’t rebuild is a liability, not an asset. Writing the docs as I went — to the point a stranger could reproduce the stack — was the difference between a hobby and something I actually trust.',
+        'The docs ended up mattering more than the containers. Writing each step down as I went, to the point a stranger could reproduce the stack, is why I trust this board with my actual photo library. It also keeps the whole thing a playground: I can try a new service, break it, and rebuild it without fear.',
       gallery: [
         {
           src: 'homelab-g1',
@@ -255,9 +255,9 @@ export const projects: Project[] = [
     repoUrl: 'https://github.com/AndresASJ/Card-Detection',
     body: {
       problem:
-        'Recognizing playing cards from a live camera is a deceptively hard CV problem: cards rotate, overlap, catch glare, and have to be matched against a 52-card template set fast enough to feel real-time.',
+        'Recognizing playing cards from a live camera sounds like a job for a trained model, and it turns out it isn’t. It is still a hard problem: cards rotate, overlap, catch glare, and have to be matched against all 52 templates fast enough to feel real-time.',
       approach:
-        'I split it into detection and recognition. Contour analysis isolates card-shaped quadrilaterals in each frame and warps them flat; ORB feature matching then identifies each card against a set of template images. The pipeline is modular so each stage can be tested on its own.',
+        'I split it into detection and recognition. Contour analysis isolates card-shaped quadrilaterals in each frame and warps them flat; ORB feature matching then identifies each card against a set of template images. The pipeline is modular so I could test each stage on its own.',
       built: [
         {
           h: 'Contour-based detection',
@@ -278,7 +278,7 @@ export const projects: Project[] = [
         { metric: '52', label: 'card template set' },
       ],
       learnings:
-        'Classic computer vision still goes a long way before you reach for a neural net. Getting the contour and warp stages right made recognition almost easy — most of the accuracy was won in preprocessing.',
+        'Classic computer vision goes a long way before you need a neural net. Almost all the accuracy was won in preprocessing: get the contour and warp stages right and recognition becomes easy, get them wrong and no clever matcher saves you.',
       gallery: [
         { src: 'card-detection-g1', alt: 'detection overlay' },
         { src: 'card-detection-g2', alt: 'template match' },
@@ -307,9 +307,9 @@ export const projects: Project[] = [
     repoUrl: 'https://github.com/AndresASJ/PythonChess',
     body: {
       problem:
-        'Building chess from scratch forces every move to be made explicit: piece geometry, blocked paths, turn order, pinned pieces, and the recursive question of whether a move exposes your own king. The original game was also desktop-only, which made it difficult to experience from a portfolio.',
+        'Building chess from scratch forces you to make every rule explicit: piece geometry, blocked paths, turn order, pinned pieces, and the recursive question of whether a move exposes your own king. Rules you have followed for years turn out to be surprisingly hard to state precisely. The original game was also desktop-only, so nobody visiting a portfolio could actually play it.',
       approach:
-        'I modelled the board and pieces explicitly, separated movement from rendering, and filtered candidate moves against the resulting king state. For the portfolio build, the existing Python modules and Pygame interface are packaged with CPython and pygame-ce for WebAssembly rather than rewritten in JavaScript.',
+        'I modelled the board and pieces explicitly, separated movement from rendering, and filtered candidate moves against the resulting king state. For the portfolio build I packaged the existing Python modules and Pygame interface with CPython and pygame-ce for WebAssembly instead of rewriting the rules in JavaScript.',
       built: [
         {
           h: 'Rules engine',
@@ -334,7 +334,7 @@ export const projects: Project[] = [
         { metric: '5 tests', label: 'movement and check regressions' },
       ],
       learnings:
-        'A clear separation between game state and rendering made it possible to repair rule edge cases and move the same Pygame project into a browser. The web build preserves the original work while making it immediately testable by anyone visiting the portfolio.',
+        'Separating game state from rendering paid off twice: it made rule edge cases fixable in isolation, and later it let the same Pygame project move into the browser untouched. The version you can play here is the original code, running on a web runtime.',
       gallery: [],
     },
   },
@@ -355,7 +355,7 @@ export const projects: Project[] = [
     repoUrl: 'https://github.com/AndresASJ/IP-Data',
     body: {
       problem:
-        'Looking up where an IP address resolves usually means bouncing between a half-dozen websites — and none of them just hand you a map you can keep.',
+        'Looking up where an IP address resolves usually means bouncing between a half-dozen websites, and none of them just hand you a map you can keep.',
       approach:
         'Validate the input, query IP-API for location data, refine coordinates with Google’s Geolocation API, and render the result as an interactive Folium map saved to a standalone HTML file.',
       built: [
@@ -373,7 +373,7 @@ export const projects: Project[] = [
         { metric: 'Folium', label: 'interactive HTML map output' },
       ],
       learnings:
-        'Stitching a couple of focused APIs together with a clean output format turns a tedious manual task into a one-command tool — the kind of small utility you actually keep around.',
+        'Stitching two focused APIs together with a clean output format turns a tedious manual task into a one-command tool. This is the kind of small utility that ends up living in your toolbox for years.',
       gallery: [{ src: 'ip-data-g1', alt: 'map output' }],
     },
   },
