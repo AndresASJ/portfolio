@@ -243,45 +243,65 @@ export const projects: Project[] = [
     title: 'Card Detection',
     year: '2025',
     summary:
-      'A real-time computer-vision system that detects and identifies playing cards from a webcam feed using contour analysis and ORB feature matching.',
+      'A webcam prototype that detects multiple playing cards, straightens angled frames and identifies a captured six-card set with ORB feature matching.',
     role: 'Solo Developer',
     timeframe: '2025',
     status: 'Shipped',
     category: 'Computer Vision',
     stack: ['Python', 'OpenCV', 'NumPy'],
-    impact: 'Recognizes multiple cards live from a webcam, with on-frame labels.',
+    impact: 'Identifies six reference cards together in one webcam frame and rejects uncaptured cards as Unknown.',
     imgLabel: 'card detection · webcam feed',
-    liveUrl: 'https://github.com/AndresASJ/Card-Detection',
+    card: {
+      src: 'card-detection-card',
+      alt: 'Six playing cards identified in one webcam frame with green contour outlines and labels',
+    },
+    cardVideo: '/media/work/card-detection-card.mp4',
+    hero: {
+      src: 'card-detection-hero',
+      alt: 'Six-card live detection result showing the Two of Hearts, Jack of Clubs, Ten of Spades, Queen of Diamonds, King of Hearts and Ace of Spades',
+    },
+    feat: {
+      src: 'card-detection-feat',
+      alt: 'OpenCV webcam result with six correctly identified playing cards arranged in two rows',
+    },
     repoUrl: 'https://github.com/AndresASJ/Card-Detection',
     body: {
       problem:
-        'Recognizing playing cards from a live camera sounds like a job for a trained model, and it turns out it isn’t. It is still a hard problem: cards rotate, overlap, catch glare, and have to be matched against all 52 templates fast enough to feel real-time.',
+        'Playing cards make a compact computer-vision problem: the camera has to separate each white rectangle from the table, handle rotation and glare, then decide whether the card matches anything it has seen before. A weak matcher will confidently assign the wrong name to every unfamiliar card.',
       approach:
-        'I split it into detection and recognition. Contour analysis isolates card-shaped quadrilaterals in each frame and warps them flat; ORB feature matching then identifies each card against a set of template images. The pipeline is modular so I could test each stage on its own.',
+        'I split detection from recognition. Contour analysis finds convex quadrilaterals and a perspective transform flattens each one to the same size. I capture reference images from the deck, cache their ORB descriptors at startup and require both a minimum score and a clear margin over the next candidate before showing a name.',
       built: [
         {
-          h: 'Contour-based detection',
-          d: 'Finds and perspective-corrects card-shaped contours in the webcam feed, handling multiple cards per frame.',
+          h: 'Contour detection and perspective correction',
+          d: 'Filters the threshold mask by area, shape, aspect ratio and convexity, then warps each detected card into a consistent 300 × 420 image.',
         },
         {
-          h: 'ORB recognition',
-          d: 'Matches each detected card against template images using Oriented FAST and Rotated BRIEF features — rotation-tolerant and license-free.',
+          h: 'ORB matching with rejection',
+          d: 'Compares cached binary descriptors with Hamming distance and Lowe’s ratio test. Weak or ambiguous results stay labeled Unknown.',
         },
         {
-          h: 'Live visual feedback',
-          d: 'Draws bounding boxes and card identities straight onto the video, with a clean module split (card, detector, matcher, utils).',
+          h: 'Capture and debug tools',
+          d: 'Builds templates from the webcam, labels every live contour and exposes the threshold mask plus normalized crops for tuning and saved evidence.',
         },
       ],
       outcome: [
-        { metric: 'Real-time', label: 'webcam card recognition' },
-        { metric: 'ORB', label: 'rotation-tolerant matching' },
-        { metric: '52', label: 'card template set' },
+        { metric: '6 / 6', label: 'cards identified together' },
+        { metric: '18 / 18', label: 'template checks at −30°, 0° and +30°' },
+        { metric: 'Unknown', label: 'uncaptured Ten of Hearts rejected' },
       ],
       learnings:
-        'Classic computer vision goes a long way before you need a neural net. Almost all the accuracy was won in preprocessing: get the contour and warp stages right and recognition becomes easy, get them wrong and no clever matcher saves you.',
+        'Most of the improvement came from making the inputs consistent. Once each contour was ordered, flattened and resized the same way, ORB had a fair comparison to make. The rejection threshold mattered just as much: admitting uncertainty is better than attaching a confident wrong label.',
       gallery: [
-        { src: 'card-detection-g1', alt: 'detection overlay' },
-        { src: 'card-detection-g2', alt: 'template match' },
+        {
+          src: 'card-detection-g1',
+          alt: 'Ten of Hearts outlined in orange and labeled Unknown beside five recognized reference cards',
+          caption: 'unknown-card rejection · live frame',
+        },
+        {
+          src: 'card-detection-g2',
+          alt: 'Binary threshold mask for six cards above the six normalized reference images used for ORB matching',
+          caption: 'threshold mask · normalized templates',
+        },
       ],
     },
   },
