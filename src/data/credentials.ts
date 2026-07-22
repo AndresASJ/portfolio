@@ -1,9 +1,6 @@
 // Credentials — badges, certifications and events, all in one place.
-// Single source of truth for the /credentials page.
-//
-// EDIT ME: every entry below is a placeholder marked `TODO` — replace with
-// your real badges, certs and events. Delete what you don't need; the page
-// renders whatever is in this array, newest first.
+// Single source of truth for the /credentials page. The page renders whatever
+// is in this array, newest first.
 
 export type CredentialKind = 'badge' | 'cert' | 'event';
 
@@ -21,6 +18,11 @@ export interface Credential {
   url?: string;
   /** Optional extras shown as small tags (topics, role, location…). */
   tags?: string[];
+  /**
+   * Basename of a badge/cert image under src/assets/credentials/, without the
+   * extension. Entries without one render text-only — no empty slot.
+   */
+  image?: string;
 }
 
 export const kindLabel: Record<CredentialKind, string> = {
@@ -29,10 +31,22 @@ export const kindLabel: Record<CredentialKind, string> = {
   event: 'Event',
 };
 
-// TODO: add your real entries here. Copy the example shapes below — one
-// object per badge/cert/event. The page shows a "coming soon" state while
-// this array is empty.
+// Add one object per badge/cert/event. The commented shapes at the bottom are
+// templates; the page shows a "coming soon" state while this array is empty.
 export const credentials: Credential[] = [
+  {
+    id: 'copilot-finish-up-a-thon',
+    kind: 'badge',
+    title: 'Copilot "Finish-Up-A-Thon" Challenge',
+    issuer: 'GitHub',
+    // Month the submission went up on dev.to (2026-06-07).
+    date: '2026.06',
+    description:
+      'Awarded for completing GitHub\'s Copilot "Finish-Up-A-Thon" challenge. I entered Kord, adding true Google Drive FLAC streaming over HTTP range requests instead of full downloads.',
+    url: 'https://dev.to/andresasj/finishing-kord-true-streaming-for-google-drive-flac-playback-4c6n',
+    tags: ['GitHub Copilot'],
+    image: 'copilot-finish-up-a-thon',
+  },
   // {
   //   id: 'example-badge',
   //   kind: 'badge',
