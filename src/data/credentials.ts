@@ -23,6 +23,11 @@ export interface Credential {
    * extension. Entries without one render text-only — no empty slot.
    */
   image?: string;
+  /**
+   * Photographs from an event, same folder and naming rule as `image`. These
+   * render as a small strip under the description, not as the badge mark.
+   */
+  photos?: string[];
 }
 
 export const kindLabel: Record<CredentialKind, string> = {
@@ -46,6 +51,21 @@ export const credentials: Credential[] = [
     url: 'https://dev.to/andresasj/finishing-kord-true-streaming-for-google-drive-flac-playback-4c6n',
     tags: ['GitHub Copilot'],
     image: 'copilot-finish-up-a-thon',
+  },
+  {
+    id: 'aws-summit-nyc-2025',
+    kind: 'event',
+    title: 'AWS Summit New York City',
+    issuer: 'AWS',
+    date: '2025.07',
+    description:
+      'Two days at the Javits Center. Sessions on the show floor plus the AWS Escape Room, a timed challenge that gates each door behind service questions — security, networking, config.',
+    tags: ['New York, NY', 'attendee'],
+    photos: [
+      'aws-summit-nyc-2025-1',
+      'aws-summit-nyc-2025-2',
+      'aws-summit-nyc-2025-3',
+    ],
   },
   // {
   //   id: 'example-badge',
