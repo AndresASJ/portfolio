@@ -14,6 +14,8 @@ export interface Props {
   alt?: string;
   // Muted loop played on hover, e.g. '/media/work/kord-card.mp4'.
   video?: string;
+  // Gallery videos can play continuously instead of waiting for hover.
+  videoMode?: 'hover' | 'loop';
   // Placeholder text, shown when there's no image to draw.
   label: string;
   index?: string;
@@ -27,6 +29,7 @@ const {
   src,
   alt = '',
   video,
+  videoMode = 'hover',
   label,
   index,
   widths = [480, 960, 1440],
@@ -59,13 +62,15 @@ const resolved = src
       />
       {video && (
         <video
-          class="m__vid"
+          class:list={['m__vid', { 'm__vid--loop': videoMode === 'loop' }]}
           muted
           loop
           playsinline
+          autoplay={videoMode === 'loop'}
           preload="none"
           aria-hidden="true"
-          data-hover-video
+          data-hover-video={videoMode === 'hover' ? '' : undefined}
+          data-loop-video={videoMode === 'loop' ? '' : undefined}
           data-src={url(video)}
         />
       )}
@@ -94,5 +99,13 @@ const resolved = src
   }
   .m__vid.is-playing {
     opacity: 1;
+  }
+  .m__vid--loop {
+    opacity: 1;
+  }
+  @media (prefers-reduced-motion: reduce) {
+    .m__vid--loop {
+      display: none;
+    }
   }
 </style>

@@ -228,6 +228,8 @@ const sections = [
                 <Media
                   src={g.src}
                   alt={g.alt}
+                  video={g.video}
+                  videoMode={g.video ? 'loop' : undefined}
                   label={g.alt}
                   widths={[320, 640, 960]}
                   sizes="(max-width: 640px) 100vw, 330px"

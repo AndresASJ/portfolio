@@ -157,5 +157,19 @@ const ogImage = new URL('assets/og.png', Astro.site).href;
         });
       }
     </script>
+
+    <!-- Gallery loops start muted; reduced-motion visitors keep the still image. -->
+    <script>
+      if (!window.matchMedia('(prefers-reduced-motion: reduce)').matches) {
+        const loops = Array.from(
+          document.querySelectorAll('[data-loop-video]')
+        ) as HTMLVideoElement[];
+
+        loops.forEach((video) => {
+          video.src = video.dataset.src || '';
+          video.play().catch(() => {});
+        });
+      }
+    </script>
   </body>
 </html>

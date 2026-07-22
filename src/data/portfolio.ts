@@ -24,6 +24,8 @@ export interface MediaRef {
   src: string;
   alt: string;
   caption?: string;
+  // Optional muted loop shown over the still image. Lives in public/media/work/.
+  video?: string;
 }
 
 export interface CaseBody {
@@ -301,6 +303,12 @@ export const projects: Project[] = [
           src: 'card-detection-g2',
           alt: 'Binary threshold mask for six cards above the six normalized reference images used for ORB matching',
           caption: 'threshold mask · normalized templates',
+        },
+        {
+          src: 'card-detection-g3',
+          alt: 'Andres placing playing cards into the webcam view while the detector labels the visible cards',
+          caption: 'live setup · placing the cards',
+          video: '/media/work/card-detection-hand.mp4',
         },
       ],
     },
