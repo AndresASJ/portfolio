@@ -366,45 +366,6 @@ export const projects: Project[] = [
       gallery: [],
     },
   },
-  {
-    id: 'ip-data',
-    title: 'IP-Data',
-    year: '2024',
-    summary:
-      'A Python tool that geolocates any public IP and renders its location on an interactive map you can open in the browser.',
-    role: 'Solo Developer',
-    timeframe: '2024',
-    status: 'Shipped',
-    category: 'Tooling',
-    stack: ['Python', 'Folium', 'Requests'],
-    impact: 'Validates, geolocates and maps any public IP to an interactive HTML map.',
-    imgLabel: 'ip-data · folium map',
-    liveUrl: 'https://github.com/AndresASJ/IP-Data',
-    repoUrl: 'https://github.com/AndresASJ/IP-Data',
-    body: {
-      problem:
-        'Looking up where an IP address resolves usually means bouncing between a half-dozen websites, and none of them just hand you a map you can keep.',
-      approach:
-        'Validate the input, query IP-API for location data, refine coordinates with Google’s Geolocation API, and render the result as an interactive Folium map saved to a standalone HTML file.',
-      built: [
-        {
-          h: 'IP lookup pipeline',
-          d: 'Input validation, IP-API geolocation, and a Google Geolocation pass for more accurate coordinates.',
-        },
-        {
-          h: 'Map generation',
-          d: 'Generates an interactive, centered map with Folium and writes it to a self-contained map.html.',
-        },
-      ],
-      outcome: [
-        { metric: '2 APIs', label: 'IP-API + Google Geolocation' },
-        { metric: 'Folium', label: 'interactive HTML map output' },
-      ],
-      learnings:
-        'Stitching two focused APIs together with a clean output format turns a tedious manual task into a one-command tool. This is the kind of small utility that ends up living in your toolbox for years.',
-      gallery: [{ src: 'ip-data-g1', alt: 'map output' }],
-    },
-  },
 ];
 
 export const socials: Social[] = [
