@@ -370,7 +370,7 @@ export const projects: Project[] = [
 
 export const socials: Social[] = [
   { label: 'GitHub', href: 'https://github.com/AndresASJ' },
-  { label: 'LinkedIn', href: 'https://linkedin.com' }, // TODO: your LinkedIn URL
+  { label: 'LinkedIn', href: 'https://www.linkedin.com/in/andresasj18' },
   { label: 'Kord', href: 'https://kordsound.com' },
 ];
 
