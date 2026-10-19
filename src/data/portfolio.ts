@@ -92,13 +92,14 @@ export const projects: Project[] = [
     title: 'Kord',
     year: '2026',
     summary:
-      'A native, bit-perfect FLAC music player for iPhone & Mac — your local library decoded bit-for-bit and sent to your DAC exactly as it was mastered.',
+      'I released Kord, a native FLAC player for iPhone that brings local and connected libraries together.',
     role: 'Solo Developer',
-    timeframe: '2026 — present',
-    status: 'WIP',
+    timeframe: '2026',
+    status: 'Shipped',
     category: 'Audio / Apple',
     stack: ['Swift', 'SwiftUI', 'Core Audio', 'AVFoundation'],
-    impact: 'Bit-perfect lossless playback on iPhone & Mac — in private development, waitlist open.',
+    impact:
+      'I released v1.0 free on the App Store for iPhone, with playback from Apple Files, selected Google Drive files, and Jellyfin.',
     imgLabel: 'kord · now playing',
     card: {
       src: 'kord-card',
@@ -113,17 +114,18 @@ export const projects: Project[] = [
       src: 'kord-feat',
       alt: 'Kord on macOS — library home with album artwork and Browse by Decade',
     },
-    liveUrl: 'https://kordsound.com',
+    liveUrl: 'https://apps.apple.com/app/id6764419623',
+    liveLabel: 'Download on the App Store',
     repoUrl: 'https://github.com/AndresASJ/FlacPlayer-Feedback',
     body: {
       problem:
         'I kept buying FLACs on Bandcamp and Qobuz, and then had nowhere good to play them on my iPhone. The closest thing to a real local-file player on iOS was foobar2000. Even apps that advertise "lossless" tend to quietly resample or transcode on the way out, with a system mixer, hidden EQ, or loudness normalization sitting between the file and your DAC. The file you paid for never reaches your ears untouched.',
       approach:
-        'So I built the player I wanted: made for audio gearheads, with an Apple philosophy. Kord is native Swift on both the iPhone in your pocket and the rig on your desk. It decodes FLAC bit-for-bit, switches the hardware sample rate to match the file, and hands the samples straight to the DAC — direct USB-C output on iPhone, exclusive CoreAudio hardware access on Mac. Everything else (EQ, lyrics, the library) exists to get you closer to the master, and stays out of the signal path.',
+        'I built the iPhone app I wanted in native Swift. Kord reads FLAC from Apple Files and connected Google Drive or Jellyfin sources, then adds optional parametric EQ, lyrics, and library organization. What reaches the output depends on the iPhone, audio route, and settings.',
       built: [
         {
-          h: 'Bit-perfect playback',
-          d: 'FLAC decoded bit-for-bit with automatic sample-rate switching to match each file — no resampling, no system mixer in the path, no secret normalization. Direct DAC output on iPhone; exclusive hardware access on Mac.',
+          h: 'FLAC playback',
+          d: 'Play FLAC files from Apple Files, individually authorized Google Drive files, or a reachable Jellyfin server. Output depends on the iPhone, audio route, and settings.',
         },
         {
           h: 'Parametric EQ',
@@ -131,7 +133,7 @@ export const projects: Project[] = [
         },
         {
           h: 'Synced lyrics',
-          d: 'Line-by-line lyrics that move in time with the music, highlighted as you listen and never a beat behind.',
+          d: 'Line-by-line lyrics from your own files, manual imports, or an optional user-supplied source URL, with timing that follows playback.',
         },
         {
           h: 'Self-organizing library',
@@ -139,9 +141,9 @@ export const projects: Project[] = [
         },
       ],
       outcome: [
-        { metric: 'Bit-perfect', label: 'FLAC, no resampling in the path' },
-        { metric: 'iPhone & Mac', label: 'native Swift, universal purchase' },
-        { metric: 'iOS 17 · macOS 14', label: 'private dev — waitlist open' },
+        { metric: 'v1.0', label: 'released October 2026' },
+        { metric: 'App Store', label: 'free iPhone download' },
+        { metric: 'iOS 18+', label: 'minimum requirement' },
       ],
       learnings:
         'Shipping a real audio app means owning the unglamorous edges long before any of it is visible: sample-rate switching, DAC routing, metadata that lies about what a file really is, a support channel. Keeping the source private but the triage public, through a feedback tracker with structured issue forms, turned out to be a clean way to involve listeners without exposing the build.',
